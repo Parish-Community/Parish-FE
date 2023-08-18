@@ -1,3 +1,3 @@
-export { default as VerifyLayout } from './VerifyLayout';
+export { default as AuthLayout } from './AuthLayout';
 export { default as DashboardLayout } from './DashboardLayout';
 export { default as Layout } from './Layout';
