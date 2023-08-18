@@ -34,5 +34,5 @@ export default [
   {
     path: '/*',
     element: <NotFound />
-  },
+  }
 ] as RouteObject[];

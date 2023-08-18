@@ -30,29 +30,28 @@ const columns: ColumnsType<DataType> = [
     dataIndex: 'name',
     sorter: true,
     render: (name) => `${name.first} ${name.last}`,
-    width: '20%',
+    width: '20%'
   },
   {
     title: 'Gender',
     dataIndex: 'gender',
     filters: [
       { text: 'Male', value: 'male' },
-      { text: 'Female', value: 'female' },
+      { text: 'Female', value: 'female' }
     ],
-    width: '20%',
+    width: '20%'
   },
   {
     title: 'Email',
-    dataIndex: 'email',
-  },
+    dataIndex: 'email'
+  }
 ];
 
 const getRandomuserParams = (params: TableParams) => ({
   results: params.pagination?.pageSize,
   page: params.pagination?.current,
-  ...params,
+  ...params
 });
-
 
 const Main = () => {
   const [data, setData] = useState<DataType[]>();
@@ -60,8 +59,8 @@ const Main = () => {
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
-      pageSize: 10,
-    },
+      pageSize: 10
+    }
   });
 
   const fetchData = () => {
@@ -75,10 +74,10 @@ const Main = () => {
           ...tableParams,
           pagination: {
             ...tableParams.pagination,
-            total: 200,
+            total: 200
             // 200 is mock data, you should read it from server
             // total: data.totalCount,
-          },
+          }
         });
       });
   };
@@ -90,12 +89,12 @@ const Main = () => {
   const handleTableChange = (
     pagination: TablePaginationConfig,
     filters: Record<string, FilterValue>,
-    sorter: SorterResult<DataType>,
+    sorter: SorterResult<DataType>
   ) => {
     setTableParams({
       pagination,
       filters,
-      ...sorter,
+      ...sorter
     });
 
     // `dataSource` is useless since `pageSize` changed
