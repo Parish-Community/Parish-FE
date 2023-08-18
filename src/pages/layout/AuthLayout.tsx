@@ -4,7 +4,7 @@ import './styles.css';
 import BannerParish from '@/assets/images/BannerParish.png';
 import logo from '@/assets/images/logo.png';
 
-const VerifyLayout = () => {
+const AuthLayout = () => {
   return (
     <div className='flex flex-row'>
       <div className='w-[70%] h-screen bg-gradient-to-r from-[#174940] from-10%  to-[#F8A927] to-90% p-10'>
@@ -20,4 +20,4 @@ const VerifyLayout = () => {
   );
 };
 
-export default VerifyLayout;
+export default AuthLayout;
