@@ -1,3 +1,20 @@
-.button-login {
+.button-primary {
   background-color: #D7B300 !important;
+}
+
+.button-primary:hover {
+  background-color: #FFFF !important;
+  transition: 0.3s !important;
+  border: 2px solid #D7B300 !important;
+  color: #174940 !important;
+}
+
+.button-secondary {
+  background-color: #FFFF !important;
+  border: 2px solid #D7B300 !important;
+}
+
+.button-secondary:hover {
+  background-color: #D7B300 !important;
+  transition: 0.3s !important;
 }

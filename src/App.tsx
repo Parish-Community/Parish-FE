@@ -1,19 +1,25 @@
 import React from 'react';
-import routes from '@/routes/index';
-// import { BrowserRouter, Route, Routes } from 'react-router-dom';
-// import { LoginPage } from './pages/login';
-import { useRoutes } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthLayout, DashboardLayout } from './pages/layout';
+import Main from './pages/main';
+import NotFound from '@/pages/NotFound';
+import { LoginPage, ForgotPasswordPage, OtpPage, ChangePasswordPage } from '@/pages/login';
 
 const App = () => {
-  const element = useRoutes(routes);
-
   return (
-    <>{element}</>
-    // <BrowserRouter>
-    //   <Routes>
-    //     <Route path='/' element={<LoginPage />} />
-    //   </Routes>
-    // </BrowserRouter>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<DashboardLayout children={<Main />} />} />
+          <Route path='/auth/login' element={<AuthLayout children={<LoginPage />} />} />
+          <Route path='/auth/forgot-password' element={<AuthLayout children={<ForgotPasswordPage />} />} />
+          <Route path='/auth/verify-otp' element={<AuthLayout children={<OtpPage />} />} />
+          <Route path='/auth/change-password' element={<AuthLayout children={<ChangePasswordPage />} />} />
+
+          <Route path='/page-404' element={<DashboardLayout children={<NotFound />} />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 };
 
