@@ -1,47 +1,62 @@
-import React, { useState, ReactNode } from 'react';
+import React, { useState } from 'react';
 // import { Outlet } from 'react-router-dom';
-import { DesktopOutlined, FileOutlined, PieChartOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons';
+import { UnorderedListOutlined, DollarOutlined, TeamOutlined, UserOutlined, HomeOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+import { Layout, Menu } from 'antd';
 import logoTop from '@/assets/images/logoTop.svg';
 import avatar from '@/assets/images/avatar.png';
 import { Avatar } from 'antd';
-import CoreButton from '@/components/Button';
+import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 
-interface DashboardLayoutProps {
-  children: ReactNode;
-}
-
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>['items'][number];
 
-function getItem(label: React.ReactNode, key: React.Key, icon?: React.ReactNode, children?: MenuItem[]): MenuItem {
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  path: React.ReactNode,
+  icon?: React.ReactNode,
+  children?: MenuItem[]
+): MenuItem {
   return {
     key,
     icon,
     children,
-    label
+    label,
+    path
   } as MenuItem;
 }
 
 const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('User', 'sub1', <UserOutlined />, [getItem('Tom', '3'), getItem('Bill', '4'), getItem('Alex', '5')]),
-  getItem('Team', 'sub2', <TeamOutlined />, [getItem('Team 1', '6'), getItem('Team 2', '8')]),
-  getItem('Files', '9', <FileOutlined />)
+  getItem('Tổng quan', '1', '', <HomeOutlined />),
+  getItem('Giáo dân', '2', 'giáo-dân', <UserOutlined />),
+  getItem('Rửa tội', '3', 'rửa-tội', <UnorderedListOutlined />),
+  getItem('Giáo lý hôn nhân', 'sub1', 'giáo-lý-hôn-nhân', <TeamOutlined />, [
+    getItem('Danh sách đăng ký', '4', 'hôn-nhân/danh-sách-đăng-ký'),
+    getItem('Lớp hôn nhân', '5', 'hôn-nhân/lớp-hôn-nhân')
+  ]),
+  getItem('Donation', '6', 'donation', <DollarOutlined />)
 ];
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout = (prop) => {
   const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer }
-  } = theme.useToken();
 
-  const handleButtonClick = () => {
-    console.log('Button clicked!');
+  const navigate = useNavigate();
+
+  const handleMenuItemClick = (key: string) => {
+    navigate(`/parish/${key}`);
   };
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem('token');
+  //   navigate('/auth/login');
+  // };
+
+  // const onConfirm = () => {
+  //   console.log('confirm');
+  // };
 
   return (
     <main>
@@ -63,49 +78,38 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
           onCollapse={(value) => setCollapsed(value)}
         >
           <div className='demo-logo-vertical' />
-          <Menu theme='light' defaultSelectedKeys={['1']} mode='inline' items={items} />
+          <Menu theme='light' defaultSelectedKeys={['1']} mode='inline'>
+            {items.map((item) =>
+              item.children ? (
+                <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
+                  {item.children.map((subItem) => (
+                    <Menu.Item key={subItem.key} onClick={() => handleMenuItemClick(subItem.path)}>
+                      {subItem.label}
+                    </Menu.Item>
+                  ))}
+                </Menu.SubMenu>
+              ) : (
+                <Menu.Item key={item.key} icon={item.icon} onClick={() => handleMenuItemClick(item.path)}>
+                  {item.label}
+                </Menu.Item>
+              )
+            )}
+          </Menu>
         </Sider>
         <Layout>
-          <Header style={{ padding: 0, background: colorBgContainer }}>
-            <div className='flex justify-end mr-6'>
-              <CoreButton
-                type='primary'
-                text='In/Xuất file'
-                htmlType='submit'
-                onClick={handleButtonClick}
-                className='w-[8%] button-secondary mt-3 h-10 mr-4 text-[#174940]'
-              />
-              <CoreButton
-                type='primary'
-                text='Upload danh sách'
-                htmlType='submit'
-                onClick={handleButtonClick}
-                className='w-[10%] button-secondary mt-3 h-10 mr-4 text-[#174940]'
-              />
-              <CoreButton
-                type='primary'
-                text='Thêm mới'
-                htmlType='submit'
-                onClick={handleButtonClick}
-                className='w-[8%] button-primary mt-3 h-10 text-[#174940]'
-              />
-            </div>
-          </Header>
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
-              {/* <Outlet /> */}
-              {children}
-            </div>
-          </Content>
+          {prop.children}
           <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
         </Layout>
       </Layout>
     </main>
   );
+};
+
+DashboardLayout.propTypes = {
+  onClick: PropTypes.func,
+  children: PropTypes.node,
+  headerChildren: PropTypes.node,
+  btnLabel: PropTypes.string
 };
 
 export default DashboardLayout;

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
 import qs from 'qs';
-import { Table } from 'antd';
+import { Table, Layout, theme } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
+import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
+import CoreDrawer from '@/components/Drawer';
 
 interface DataType {
   name: {
@@ -53,6 +55,8 @@ const getRandomuserParams = (params: TableParams) => ({
   ...params
 });
 
+const { Header, Content } = Layout;
+
 const Main = () => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
@@ -62,6 +66,20 @@ const Main = () => {
       pageSize: 10
     }
   });
+
+  const {
+    token: { colorBgContainer }
+  } = theme.useToken();
+
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const fetchData = () => {
     setLoading(true);
@@ -104,14 +122,25 @@ const Main = () => {
   };
 
   return (
-    <Table
-      columns={columns}
-      rowKey={(record) => record.login.uuid}
-      dataSource={data}
-      pagination={tableParams.pagination}
-      loading={loading}
-      onChange={handleTableChange}
-    />
+    <main>
+      {/* <h1>Hell</h1> */}
+      <Header style={{ padding: 0, background: colorBgContainer }}>
+        <HeaderChristian btnLabel='Giáo dân' onClick={showDrawer} />
+      </Header>
+      <Content style={{ margin: '26px 18px' }}>
+        <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
+          <Table
+            columns={columns}
+            rowKey={(record) => record.login.uuid}
+            dataSource={data}
+            pagination={tableParams.pagination}
+            loading={loading}
+            onChange={handleTableChange}
+          />
+        </div>
+      </Content>
+      <CoreDrawer open={open} onClose={onClose} />
+    </main>
   );
 };
 
