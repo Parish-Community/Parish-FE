@@ -1,102 +1,152 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, DatePicker, Drawer, Form, Input, Row, Select, Space } from 'antd';
+import { Col, Drawer, Form, FormInstance, Input, Row, Select, Space } from 'antd';
+import CoreButton from './Button';
+import UploadImage from './uploadImage/UploadImage';
+import DatePickerComponent from './datePicker/DatePicker';
+
+interface CoreDrawerProps {
+  title: string;
+  open: boolean;
+  onClose: () => void;
+  form: FormInstance<unknown>;
+}
 
 const { Option } = Select;
 
-const CoreDrawer = (props) => {
+const CoreDrawer = (props: CoreDrawerProps) => {
+  const onFinish = () => {
+    // Should format date value before submit.
+    props.form.validateFields();
+    console.log('Received values of form: ', props.form.getFieldsValue());
+    // onClose();
+  };
+
   return (
     <>
       <Drawer
-        title='Create a new account'
+        title={props.title}
         width={720}
         onClose={props.onClose}
         open={props.open}
         bodyStyle={{ paddingBottom: 80 }}
         extra={
           <Space>
-            <Button onClick={props.onClose}>Cancel</Button>
-            <Button onClick={props.onClose} type='primary'>
-              Submit
-            </Button>
+            <CoreButton
+              key={1}
+              type='secondary'
+              text='Cancel'
+              htmlType='submit'
+              onClick={props.onClose}
+              className='w-[8%] button-secondary mt-3 h-10 mr-4 text-[#000] hover:text-[#fff]'
+            />
+            <CoreButton
+              key={2}
+              onClick={onFinish}
+              type='primary'
+              text='Save'
+              htmlType='submit'
+              className='w-[8%] button-primary mt-3 h-10 mr-4 text-[#fff]'
+            />
           </Space>
         }
       >
-        <Form layout='vertical' hideRequiredMark>
+        <Form layout='vertical' hideRequiredMark form={props.form}>
+          <Form.Item label='Image'>
+            <UploadImage></UploadImage>
+          </Form.Item>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item name='name' label='Name' rules={[{ required: true, message: 'Please enter user name' }]}>
-                <Input placeholder='Please enter user name' />
+              <Form.Item
+                name='fullName'
+                label='Full Name'
+                rules={[{ required: true, message: 'Please enter user full name' }]}
+              >
+                <Input placeholder='Please enter user full name' />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name='url' label='Url' rules={[{ required: true, message: 'Please enter url' }]}>
-                <Input
-                  style={{ width: '100%' }}
-                  addonBefore='http://'
-                  addonAfter='.com'
-                  placeholder='Please enter url'
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name='owner' label='Owner' rules={[{ required: true, message: 'Please select an owner' }]}>
-                <Select placeholder='Please select an owner'>
-                  <Option value='xiao'>Xiaoxiao Fu</Option>
-                  <Option value='mao'>Maomao Zhou</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name='type' label='Type' rules={[{ required: true, message: 'Please choose the type' }]}>
-                <Select placeholder='Please choose the type'>
-                  <Option value='private'>Private</Option>
-                  <Option value='public'>Public</Option>
-                </Select>
+              <Form.Item name='email' label='Email' rules={[{ required: true, message: 'Please enter user email' }]}>
+                <Input placeholder='Please enter user email' />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name='approver'
-                label='Approver'
-                rules={[{ required: true, message: 'Please choose the approver' }]}
+                name='phoneNumber'
+                label='Phone Number'
+                rules={[{ required: true, message: 'Please enter user phone number' }]}
               >
-                <Select placeholder='Please choose the approver'>
-                  <Option value='jack'>Jack Ma</Option>
-                  <Option value='tom'>Tom Liu</Option>
-                </Select>
+                <Input placeholder='Please enter user phone number' />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name='dateTime'
-                label='DateTime'
-                rules={[{ required: true, message: 'Please choose the dateTime' }]}
+                name='giao_ho'
+                label='Giáo họ'
+                rules={[{ required: true, message: 'Please enter your giáo họ' }]}
               >
-                <DatePicker.RangePicker
-                  style={{ width: '100%' }}
-                  getPopupContainer={(trigger) => trigger.parentElement!}
-                />
+                <Input placeholder='Please enter your giáo họ' />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name='dateOfBirth'
+                label='Date of birth'
+                rules={[{ required: true, message: 'Please enter date of birth' }]}
+              >
+                {/* <Input placeholder='Please enter user phone number' /> */}
+                <DatePickerComponent />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name='gender' label='Gender' rules={[{ required: true, message: 'Please select gender' }]}>
+                <Select placeholder='Select a gender' allowClear>
+                  <Option value='Male'>Male</Option>
+                  <Option value='Female'>Female</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item name='father' label='Father' rules={[{ required: true, message: 'Please enter your Father' }]}>
+                <Input placeholder='Please enter your ' />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item name='mother' label='Mother' rules={[{ required: true, message: 'Please enter your mother' }]}>
+                <Input placeholder='Please enter your mother' />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name='nguoi_do_dau'
+                label='Người đỡ đầu '
+                rules={[{ required: true, message: 'Please enter your Người đỡ đầu ' }]}
+              >
+                <Input placeholder='Please enter your Người đỡ đầu ' />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                name='description'
-                label='Description'
+                name='address'
+                label='Address'
                 rules={[
                   {
                     required: true,
-                    message: 'please enter url description'
+                    message: 'please enter your Address'
                   }
                 ]}
               >
-                <Input.TextArea rows={4} placeholder='please enter url description' />
+                <Input.TextArea rows={2} placeholder='please enter your description' />
               </Form.Item>
             </Col>
           </Row>
@@ -107,7 +157,7 @@ const CoreDrawer = (props) => {
 };
 
 CoreDrawer.propTypes = {
-  type: PropTypes.string,
+  title: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired
 };

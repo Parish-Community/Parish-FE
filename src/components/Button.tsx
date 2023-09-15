@@ -3,7 +3,7 @@ import { Button } from 'antd';
 import PropTypes from 'prop-types';
 
 const CoreButton = (props) => {
-  const buttonClassName = `core-button ${props.className}`;
+  const buttonClassName = `core-button ${props.className} w-auto`;
   return (
     <Button
       className={buttonClassName}
