@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
 import qs from 'qs';
-import { Table } from 'antd';
+import { Table, Layout, theme, Form } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
+import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
+import CoreDrawer from '@/components/Drawer';
 
 interface DataType {
   name: {
@@ -53,15 +55,37 @@ const getRandomuserParams = (params: TableParams) => ({
   ...params
 });
 
+const { Header, Content } = Layout;
+
 const Main = () => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
+  const [form] = Form.useForm();
+
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
       pageSize: 10
     }
   });
+
+  const {
+    token: { colorBgContainer }
+  } = theme.useToken();
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickBtn = () => {
+    console.log('click');
+  };
+
+  const showDrawer = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
 
   const fetchData = () => {
     setLoading(true);
@@ -97,21 +121,36 @@ const Main = () => {
       ...sorter
     });
 
-    // `dataSource` is useless since `pageSize` changed
     if (pagination.pageSize !== tableParams.pagination?.pageSize) {
       setData([]);
     }
   };
 
+  const listBUttons = [
+    { label: 'Xuất danh sách', htmlType: 'submit', onClick: handleClickBtn, typeBtn: 'secondary' },
+    { label: 'Upload danh sách', htmlType: 'submit', onClick: handleClickBtn, typeBtn: 'secondary' },
+    { label: 'Giáo dân', htmlType: 'submit', onClick: showDrawer, typeBtn: 'primary' }
+  ];
+
   return (
-    <Table
-      columns={columns}
-      rowKey={(record) => record.login.uuid}
-      dataSource={data}
-      pagination={tableParams.pagination}
-      loading={loading}
-      onChange={handleTableChange}
-    />
+    <main>
+      <Header style={{ padding: 0, background: colorBgContainer }}>
+        <HeaderChristian buttons={listBUttons} />
+      </Header>
+      <Content style={{ margin: '26px 18px' }}>
+        <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
+          <Table
+            columns={columns}
+            rowKey={(record) => record.login.uuid}
+            dataSource={data}
+            pagination={tableParams.pagination}
+            loading={loading}
+            onChange={handleTableChange}
+          />
+        </div>
+      </Content>
+      <CoreDrawer title='Thêm thông tin giáo dân' open={open} onClose={onClose} form={form} />
+    </main>
   );
 };
 

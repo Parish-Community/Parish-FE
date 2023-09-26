@@ -11,6 +11,9 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<DashboardLayout children={<Main />} />} />
+          <Route path='/parish/' element={<DashboardLayout children={<Main />} />} />
+          <Route path='/parish/giáo-dân' element={<DashboardLayout children={<Main />} />} />
+          <Route path='/parish/rửa-tội' element={<DashboardLayout children={<Main />} />} />
           <Route path='/auth/login' element={<AuthLayout children={<LoginPage />} />} />
           <Route path='/auth/forgot-password' element={<AuthLayout children={<ForgotPasswordPage />} />} />
           <Route path='/auth/verify-otp' element={<AuthLayout children={<OtpPage />} />} />
