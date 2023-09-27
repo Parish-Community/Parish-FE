@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Col, Drawer, Form, FormInstance, Input, Row, Select, Space } from 'antd';
+import { Button, Col, Drawer, Form, FormInstance, Input, Row, Select, Space } from 'antd';
 import CoreButton from './Button';
-import UploadImage from './uploadImage/UploadImage';
 import DatePickerComponent from './datePicker/DatePicker';
+import { UploadOutlined, DeleteFilled } from '@ant-design/icons';
+import avatarDefault from '@/assets/images/Avatar.jpeg';
 
 interface CoreDrawerProps {
   title: string;
@@ -15,11 +16,20 @@ interface CoreDrawerProps {
 const { Option } = Select;
 
 const CoreDrawer = (props: CoreDrawerProps) => {
+  const [image, setImage] = useState('');
   const onFinish = () => {
-    // Should format date value before submit.
     props.form.validateFields();
     console.log('Received values of form: ', props.form.getFieldsValue());
-    // onClose();
+  };
+
+  const onImageChange = (event: any) => {
+    if (event.target.files && event.target.files[0]) {
+      setImage(URL.createObjectURL(event.target.files[0]));
+    }
+  };
+
+  const onRemoveAvatar = () => {
+    setImage('');
   };
 
   return (
@@ -52,8 +62,39 @@ const CoreDrawer = (props: CoreDrawerProps) => {
         }
       >
         <Form layout='vertical' hideRequiredMark form={props.form}>
-          <Form.Item label='Image'>
-            <UploadImage></UploadImage>
+          <Form.Item label='Avatar' name='avatar'>
+            <div className='w-full h-[140px] flex gap-6'>
+              <div className=''>
+                <img
+                  alt='avatar'
+                  src={image === '' ? avatarDefault : image}
+                  className='rounded-full h-full w-[140px] border-4 border-[#174940]'
+                />
+              </div>
+              <div className='flex items-center gap-3'>
+                <div className='w-[180px] text-center font-medium bg-[#D7B300] cursor-pointer py-2 h-[40px] rounded-md border-2 flex justify-center items-center gap-2'>
+                  <UploadOutlined style={{ fontSize: 22 }} />
+                  <label htmlFor='file-upload' className='text-white'>
+                    UPLOAD AVATAR
+                  </label>
+                  <input
+                    id='file-upload'
+                    type='file'
+                    accept='image/*'
+                    onChange={onImageChange}
+                    style={{ display: 'none' }}
+                  />
+                </div>
+                {image !== '' && (
+                  <Button className='h-[40px]' onClick={onRemoveAvatar}>
+                    <DeleteFilled style={{ fontSize: 22, color: '#174940' }} />
+                  </Button>
+                )}
+                {/* <Button className='h-[40px]'>
+                  <DeleteFilled style={{ fontSize: 22, color: '#174940' }} />
+                </Button> */}
+              </div>
+            </div>
           </Form.Item>
           <Row gutter={16}>
             <Col span={12}>
