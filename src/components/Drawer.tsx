@@ -68,7 +68,7 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                 <img
                   alt='avatar'
                   src={image === '' ? avatarDefault : image}
-                  className='rounded-full h-full w-[140px] border-4 border-[#174940]'
+                  className='rounded-full h-full w-[140px] border-2 border-[#174940]'
                 />
               </div>
               <div className='flex items-center gap-3'>
@@ -90,9 +90,6 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                     <DeleteFilled style={{ fontSize: 22, color: '#174940' }} />
                   </Button>
                 )}
-                {/* <Button className='h-[40px]'>
-                  <DeleteFilled style={{ fontSize: 22, color: '#174940' }} />
-                </Button> */}
               </div>
             </div>
           </Form.Item>
