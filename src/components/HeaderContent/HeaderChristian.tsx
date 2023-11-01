@@ -30,27 +30,6 @@ const HeaderChristian = (props: { buttons: HeaderChristianProps[] }) => {
           />
         );
       })}
-      {/* <CoreButton
-        type='primary'
-        text={'Xuất danh sách'}
-        htmlType='submit'
-        onClick={props.onClick}
-        className='w-[8%] button-secondary mt-3 h-10 mr-4 text-[#13302a]'
-      />
-      <CoreButton
-        type='primary'
-        text='Upload danh sách'
-        htmlType='submit'
-        onClick={props.onClick}
-        className='w-[10%] button-secondary mt-3 h-10 mr-4 text-[#11312b]'
-      />
-      <CoreButton
-        type='primary'
-        text={props.btnLabel}
-        htmlType='submit'
-        onClick={props.onClick}
-        className='w-[8%] button-primary mt-3 h-10 text-[#13332d]'
-      /> */}
     </div>
   );
 };

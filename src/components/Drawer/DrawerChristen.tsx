@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Drawer, Form, FormInstance, Input, Row, Select, Space, Modal } from 'antd';
-import CoreButton from './Button';
-import DatePickerComponent from './datePicker/DatePicker';
+import CoreButton from '../Button';
+import DatePickerComponent from '../datePicker/DatePicker';
 import { UploadOutlined, DeleteFilled } from '@ant-design/icons';
 import avatarDefault from '@/assets/images/Avatar.jpeg';
 
-interface CoreDrawerProps {
+interface DrawerChristenProps {
   title: string;
   open: boolean;
   onClose: () => void;
@@ -14,8 +14,7 @@ interface CoreDrawerProps {
 }
 
 const { Option } = Select;
-
-const CoreDrawer = (props: CoreDrawerProps) => {
+const DrawerChristenComponent = (props: DrawerChristenProps) => {
   const [image, setImage] = useState('');
   const onFinish = () => {
     props.form.validateFields();
@@ -65,37 +64,6 @@ const CoreDrawer = (props: CoreDrawerProps) => {
         }
       >
         <Form layout='vertical' hideRequiredMark form={props.form}>
-          <Form.Item label='Avatar' name='avatar'>
-            <div className='w-full h-[140px] flex gap-6'>
-              <div className=''>
-                <img
-                  alt='avatar'
-                  src={image === '' ? avatarDefault : image}
-                  className='rounded-full h-full w-[140px] border-2 border-[#174940]'
-                />
-              </div>
-              <div className='flex items-center gap-3'>
-                <div className='w-[180px] text-center font-medium bg-[#D7B300] cursor-pointer py-2 h-[40px] rounded-md border-2 flex justify-center items-center gap-2'>
-                  <UploadOutlined style={{ fontSize: 22 }} />
-                  <label htmlFor='file-upload' className='text-white'>
-                    UPLOAD AVATAR
-                  </label>
-                  <input
-                    id='file-upload'
-                    type='file'
-                    accept='image/*'
-                    onChange={onImageChange}
-                    style={{ display: 'none' }}
-                  />
-                </div>
-                {image !== '' && (
-                  <Button className='h-[40px]' onClick={onRemoveAvatar}>
-                    <DeleteFilled style={{ fontSize: 22, color: '#174940' }} />
-                  </Button>
-                )}
-              </div>
-            </div>
-          </Form.Item>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
@@ -197,10 +165,10 @@ const CoreDrawer = (props: CoreDrawerProps) => {
   );
 };
 
-CoreDrawer.propTypes = {
+DrawerChristenComponent.propTypes = {
   title: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired
 };
 
-export default CoreDrawer;
+export default DrawerChristenComponent;

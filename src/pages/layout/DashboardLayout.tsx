@@ -30,7 +30,7 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-  getItem('Tổng quan', '1', '', <HomeOutlined />),
+  getItem('Tổng quan', '1', 'overview', <HomeOutlined />),
   getItem('Giáo dân', '2', 'giáo-dân', <UserOutlined />),
   getItem('Rửa tội', '3', 'rửa-tội', <UnorderedListOutlined />),
   getItem('Giáo lý hôn nhân', 'sub1', 'giáo-lý-hôn-nhân', <TeamOutlined />, [
