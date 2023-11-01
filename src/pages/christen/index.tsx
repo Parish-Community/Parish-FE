@@ -6,6 +6,7 @@ import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
 import CoreDrawer from '@/components/Drawer';
+import DrawerChristenComponent from "@/components/Drawer/DrawerChristen";
 
 interface DataType {
   name: {
@@ -57,7 +58,7 @@ const getRandomuserParams = (params: TableParams) => ({
 
 const { Header, Content } = Layout;
 
-const Main = () => {
+const ChristenPage = () => {
   const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
@@ -129,7 +130,7 @@ const Main = () => {
   const listBUttons = [
     { label: 'Xuất danh sách', htmlType: 'submit', onClick: handleClickBtn, typeBtn: 'secondary' },
     { label: 'Upload danh sách', htmlType: 'submit', onClick: handleClickBtn, typeBtn: 'secondary' },
-    { label: 'Giáo dân', htmlType: 'submit', onClick: showDrawer, typeBtn: 'primary' }
+    { label: 'Rửa tội', htmlType: 'submit', onClick: showDrawer, typeBtn: 'primary' }
   ];
 
   return (
@@ -149,9 +150,9 @@ const Main = () => {
           />
         </div>
       </Content>
-      <CoreDrawer title='Thêm thông tin giáo dân' open={open} onClose={onClose} form={form} />
+      <DrawerChristenComponent title='Thêm thông tin rửa tội' open={open} onClose={onClose} form={form} />
     </main>
   );
 };
 
-export default Main;
+export default ChristenPage;

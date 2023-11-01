@@ -2,11 +2,17 @@ import React from 'react';
 import { Button } from 'antd';
 import PropTypes from 'prop-types';
 
-const CoreButton = ({ type, text, htmlType, onClick, className }) => {
-  const buttonClassName = `core-button ${className}`;
+const CoreButton = (props) => {
+  const buttonClassName = `core-button ${props.className} w-auto`;
   return (
-    <Button className={buttonClassName} type={type} htmlType={htmlType} onClick={onClick}>
-      {text}
+    <Button
+      className={buttonClassName}
+      type={props.type}
+      htmlType={props.htmlType}
+      onClick={props.onClick}
+      href={props.href}
+    >
+      {props.text}
     </Button>
   );
 };
@@ -16,7 +22,8 @@ CoreButton.propTypes = {
   text: PropTypes.string.isRequired,
   onClick: PropTypes.func.isRequired,
   htmlType: PropTypes.string.isRequired,
-  className: PropTypes.string
+  className: PropTypes.string,
+  href: PropTypes.string
 };
 
 export default CoreButton;
