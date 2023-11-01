@@ -1,14 +1,54 @@
-import React from 'react';
-import { Form, Input } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, message } from 'antd';
 import './styles.css';
 import logo2 from '@/assets/images/logo-2.png';
 import CoreButton from '@/components/Button';
+import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { saveUserData } from '../../hooks/actions/userActions';
+import { jwtDecode } from "jwt-decode";
+
+interface JwtPayload {
+  accountId: number;
+  fullname: string;
+  email: string;
+  phonenumber: string;
+  roleId: number;
+  role: string;
+  isActive: boolean;
+  firstLogin: boolean;
+}
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleButtonClick = () => {
-    console.log('Button clicked!');
+  const handleButtonClick = async () => {
+    try {
+      const formData = await form.validateFields();
+      setLoading(true);
+
+      const response = await axios.post('http://localhost:8888/api/v1/auth/login', formData);
+      // check response role if role is not admin then return error
+      // if (response.data.role !== 'admin') {
+      //   message.error('You are not admin');
+      //   setLoading(false);
+      //   return;
+      // }
+      const decodedToken = jwtDecode<JwtPayload>(response.data.data.accessToken);
+      dispatch(saveUserData(decodedToken, response.data.data.accessToken));
+
+      form.resetFields();
+      setLoading(false);
+      navigate('/parish/overview');
+    } catch (error) {
+      console.error('Login error:', error);
+      message.error('Login failed. Please check your phone number and password.');
+      setLoading(false);
+    }
   };
 
   return (
@@ -19,7 +59,7 @@ const LoginPage = () => {
         <p className='font-normal text-base pt-10 text-[#636366]'>Please login to manage Church Community.</p>
         <div className=''>
           <Form form={form} layout='vertical' className='pt-6'>
-            <Form.Item label='Phone number' name='phoneNumber'>
+            <Form.Item label='Phone number' name='phonenumber'>
               <Input className='w-[100%] h-[40px]' />
             </Form.Item>
             <Form.Item label='Password' name='password'>
@@ -37,6 +77,7 @@ const LoginPage = () => {
                 htmlType='submit'
                 onClick={handleButtonClick}
                 className='w-[100%] button-login'
+                loading={loading}
               />
             </Form.Item>
           </Form>

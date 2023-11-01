@@ -6,10 +6,12 @@ import NotFound from '@/pages/NotFound';
 import { LoginPage, ForgotPasswordPage, OtpPage, ChangePasswordPage } from '@/pages/login';
 import OverviewPage from './pages/overview';
 import ChristenPage from "./pages/christen";
+import { Provider } from 'react-redux';
+import store from './store';
 
 const App = () => {
   return (
-    <div>
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<DashboardLayout children={<OverviewPage />} />} />
@@ -24,7 +26,7 @@ const App = () => {
           <Route path='/page-404' element={<DashboardLayout children={<NotFound />} />} />
         </Routes>
       </BrowserRouter>
-    </div>
+    </Provider>
   );
 };
 

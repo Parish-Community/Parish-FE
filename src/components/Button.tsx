@@ -11,6 +11,7 @@ const CoreButton = (props) => {
       htmlType={props.htmlType}
       onClick={props.onClick}
       href={props.href}
+      loading={props.loading}
     >
       {props.text}
     </Button>
@@ -23,7 +24,8 @@ CoreButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   htmlType: PropTypes.string.isRequired,
   className: PropTypes.string,
-  href: PropTypes.string
+  href: PropTypes.string,
+  loading: PropTypes.bool
 };
 
 export default CoreButton;
