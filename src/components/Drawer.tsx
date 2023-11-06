@@ -100,15 +100,19 @@ const CoreDrawer = (props: CoreDrawerProps) => {
             <Col span={12}>
               <Form.Item
                 name='fullName'
+                label='Tên Thánh'
+                rules={[{ required: true, message: 'Please enter tên thánh' }]}
+              >
+                <Input placeholder='Please enter tên thánh' />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name='fullName'
                 label='Full Name'
                 rules={[{ required: true, message: 'Please enter user full name' }]}
               >
                 <Input placeholder='Please enter user full name' />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name='email' label='Email' rules={[{ required: true, message: 'Please enter user email' }]}>
-                <Input placeholder='Please enter user email' />
               </Form.Item>
             </Col>
           </Row>
@@ -187,7 +191,7 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                   }
                 ]}
               >
-                <Input.TextArea rows={2} placeholder='please enter your description' />
+                <Input.TextArea rows={2} placeholder='please enter address' />
               </Form.Item>
             </Col>
           </Row>

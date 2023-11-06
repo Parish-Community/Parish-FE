@@ -183,7 +183,13 @@ const OverviewPage = () => {
   return (
     <div className='flex justify-center'>
       <div className='w-[50%] h-[500px] mt-6 bg-white ml-8'>
-        <Column {...config} />
+        <Column
+          {...config}
+          label={{
+            position: 'middle',
+            layout: [{ type: 'interval-adjust-position' }, { type: 'interval-hide-overlap' }, { type: 'adjust-color' }]
+          }}
+        />
       </div>
       <div className='w-[50%] h-[610px] p-8'>
         <Table columns={columns} dataSource={dataTable} />

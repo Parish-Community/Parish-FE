@@ -14,6 +14,7 @@ interface DataType {
   };
   gender: string;
   email: string;
+  phonenumber: string;
   login: {
     uuid: string;
   };
@@ -28,10 +29,20 @@ interface TableParams {
 
 const columns: ColumnsType<DataType> = [
   {
-    title: 'Name',
+    title: 'Họ và tên',
     dataIndex: 'name',
     sorter: true,
     render: (name) => `${name.first} ${name.last}`,
+    width: '20%'
+  },
+  {
+    title: 'Số điện thoại',
+    dataIndex: 'phonenumber',
+    width: '20%'
+  },
+  {
+    title: 'Ngày sinh',
+    dataIndex: 'gender',
     width: '20%'
   },
   {
@@ -44,8 +55,17 @@ const columns: ColumnsType<DataType> = [
     width: '20%'
   },
   {
-    title: 'Email',
-    dataIndex: 'email'
+    title: 'Giáo họ',
+    dataIndex: 'Cluster',
+    filters: [
+      { text: 'Male', value: 'male' },
+      { text: 'Female', value: 'female' }
+    ],
+    width: '20%'
+  },
+  {
+    title: 'Tính năng',
+    width: '20%'
   }
 ];
 

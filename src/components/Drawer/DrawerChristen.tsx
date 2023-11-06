@@ -68,26 +68,26 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
             <Col span={12}>
               <Form.Item
                 name='fullName'
-                label='Full Name'
+                label='Tên thánh'
                 rules={[{ required: true, message: 'Please enter user full name' }]}
               >
                 <Input placeholder='Please enter user full name' />
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item name='email' label='Email' rules={[{ required: true, message: 'Please enter user email' }]}>
-                <Input placeholder='Please enter user email' />
+              <Form.Item
+                name='fullName'
+                label='Full Name'
+                rules={[{ required: true, message: 'Please enter user full name' }]}
+              >
+                <Input placeholder='Please enter user full name' />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
-                name='phoneNumber'
-                label='Phone Number'
-                rules={[{ required: true, message: 'Please enter user phone number' }]}
-              >
-                <Input placeholder='Please enter user phone number' />
+              <Form.Item name='email' label='Email' rules={[{ required: true, message: 'Please enter user email' }]}>
+                <Input placeholder='Please enter user email' />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -140,6 +140,38 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
                 rules={[{ required: true, message: 'Please enter your Người đỡ đầu ' }]}
               >
                 <Input placeholder='Please enter your Người đỡ đầu ' />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name='nguoi_do_dau'
+                label='Cha cử hành'
+                rules={[{ required: true, message: 'Please enter your Người đỡ đầu ' }]}
+              >
+                <Input placeholder='Please enter your Người đỡ đầu ' />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name='nguoi_do_dau'
+                label='Ngày cử hành'
+                rules={[{ required: true, message: 'Please enter your Người đỡ đầu ' }]}
+              >
+                <DatePickerComponent />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name='gender'
+                label='Nơi cử hành'
+                rules={[{ required: true, message: 'Please select nơi cử hành' }]}
+              >
+                <Select placeholder='Select a gender' allowClear>
+                  <Option value='Male'>Male</Option>
+                  <Option value='Female'>Female</Option>
+                </Select>
               </Form.Item>
             </Col>
           </Row>
