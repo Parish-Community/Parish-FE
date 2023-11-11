@@ -1,93 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import './styles.css';
 import qs from 'qs';
-import { Table, Layout, theme, Form } from 'antd';
+import { Layout, theme, Form, Space, Image, Modal } from 'antd';
 import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
 import CoreDrawer from '@/components/Drawer';
-
-interface DataType {
-  name: {
-    first: string;
-    last: string;
-  };
-  gender: string;
-  email: string;
-  phonenumber: string;
-  login: {
-    uuid: string;
-  };
-}
-
-interface TableParams {
-  pagination?: TablePaginationConfig;
-  sortField?: string;
-  sortOrder?: string;
-  filters?: Record<string, FilterValue>;
-}
-
-const columns: ColumnsType<DataType> = [
-  {
-    title: 'Họ và tên',
-    dataIndex: 'name',
-    sorter: true,
-    render: (name) => `${name.first} ${name.last}`,
-    width: '20%'
-  },
-  {
-    title: 'Số điện thoại',
-    dataIndex: 'phonenumber',
-    width: '20%'
-  },
-  {
-    title: 'Ngày sinh',
-    dataIndex: 'gender',
-    width: '20%'
-  },
-  {
-    title: 'Gender',
-    dataIndex: 'gender',
-    filters: [
-      { text: 'Male', value: 'male' },
-      { text: 'Female', value: 'female' }
-    ],
-    width: '20%'
-  },
-  {
-    title: 'Giáo họ',
-    dataIndex: 'Cluster',
-    filters: [
-      { text: 'Male', value: 'male' },
-      { text: 'Female', value: 'female' }
-    ],
-    width: '20%'
-  },
-  {
-    title: 'Tính năng',
-    width: '20%'
-  }
-];
-
-const getRandomuserParams = (params: TableParams) => ({
-  results: params.pagination?.pageSize,
-  page: params.pagination?.current,
-  ...params
-});
+import icondDelete from '@/assets/icons/IconDelete.png';
+import { DeleteOutlined } from '@ant-design/icons';
+import useLogic from './useLogic';
+import { Table } from '@/components/table';
 
 const { Header, Content } = Layout;
 
 const Main = () => {
-  const [data, setData] = useState<DataType[]>();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
 
-  const [tableParams, setTableParams] = useState<TableParams>({
-    pagination: {
-      current: 1,
-      pageSize: 10
-    }
-  });
+  const {
+    parishioners,
+    tableKey,
+    columns,
+    isMiddleScreen,
+    deleteModalVisible,
+    selectedRecord,
+    handleDeleteConfirm,
+    handleDeleteCancel
+  } = useLogic();
 
   const {
     token: { colorBgContainer }
@@ -107,45 +46,6 @@ const Main = () => {
     setOpen(false);
   };
 
-  const fetchData = () => {
-    setLoading(true);
-    fetch(`https://randomuser.me/api?${qs.stringify(getRandomuserParams(tableParams))}`)
-      .then((res) => res.json())
-      .then(({ results }) => {
-        setData(results);
-        setLoading(false);
-        setTableParams({
-          ...tableParams,
-          pagination: {
-            ...tableParams.pagination,
-            total: 200
-            // 200 is mock data, you should read it from server
-            // total: data.totalCount,
-          }
-        });
-      });
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, [JSON.stringify(tableParams)]);
-
-  const handleTableChange = (
-    pagination: TablePaginationConfig,
-    filters: Record<string, FilterValue>,
-    sorter: SorterResult<DataType>
-  ) => {
-    setTableParams({
-      pagination,
-      filters,
-      ...sorter
-    });
-
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
-      setData([]);
-    }
-  };
-
   const listBUttons = [
     { label: 'Xuất danh sách', htmlType: 'submit', onClick: handleClickBtn, typeBtn: 'secondary' },
     { label: 'Upload danh sách', htmlType: 'submit', onClick: handleClickBtn, typeBtn: 'secondary' },
@@ -160,16 +60,26 @@ const Main = () => {
       <Content style={{ margin: '26px 18px' }}>
         <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
           <Table
+            key={tableKey}
+            dataSource={parishioners}
             columns={columns}
-            rowKey={(record) => record.login.uuid}
-            dataSource={data}
-            pagination={tableParams.pagination}
-            loading={loading}
-            onChange={handleTableChange}
+            size={isMiddleScreen ? 'middle' : 'small'}
+            pageSizeOptions={['10', '20', '30']}
+            showSizeChanger={false}
           />
         </div>
       </Content>
       <CoreDrawer title='Thêm thông tin giáo dân' open={open} onClose={onClose} form={form} />
+      <Modal
+        title='Confirm Delete'
+        visible={deleteModalVisible}
+        onOk={handleDeleteConfirm}
+        onCancel={handleDeleteCancel}
+      >
+        <p>Are you sure you want to delete this record?</p>
+        {/* Display additional information about the record if needed */}
+        {/* For example: <p>{selectedRecord && selectedRecord.fullname}</p> */}
+      </Modal>
     </main>
   );
 };
