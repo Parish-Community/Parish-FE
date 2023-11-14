@@ -1,11 +1,11 @@
-import { fetchParishioners } from '@/services/apis/parishioner';
 import { Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
+import { fetchCourses } from "@/services/apis/course";
 
 const useLogic = () => {
-  const [parishioners, setParishioner] = useState<any[]>([]);
+  const [courses, setCourses] = useState<any[]>([]);
   const [tableKey, setTableKey] = useState(0);
   const [isMiddleScreen, setIsMiddleScreen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
@@ -36,8 +36,8 @@ const useLogic = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const getAllParishioners = async () => {
       try {
-        const response = await fetchParishioners();
-        setParishioner(response.data);
+        const response = await fetchCourses();
+        setCourses(response.data);
         console.log('Parishioners:', response.data);
       } catch (error) {
         console.log('Error fetching parishioners:', error);
@@ -49,45 +49,47 @@ const useLogic = () => {
 
   const columns: ColumnsType<DataType> = [
     {
-      title: 'Họ và tên',
-      dataIndex: 'fullname',
-      sorter: true,
-      render: (fullname) => `${fullname}`,
+      title: 'Tên lớp',
+      dataIndex: 'courseName',
+      render: (courseName) => `${courseName}`,
+      width: '16%'
+    },
+    {
+      title: 'Giáo viên',
+      dataIndex: 'parishioner',
+      render: (parishioner) => `${parishioner.christianName + ' ' + parishioner.fullname}`,
+      width: '20%'
+    },
+    {
+      title: 'Ngày bắt đầu',
+      dataIndex: 'startDate',
+      render: (startDate) => `${startDate}`,
       width: '10%'
     },
     {
-      title: 'Số điện thoại',
-      dataIndex: 'phonenumber',
-      width: '8%'
+      title: 'Ngày kết thúc',
+      dataIndex: 'endDate',
+      render: (endDate) => `${endDate}`,
+      width: '10%'
     },
     {
-      title: 'Ngày sinh',
-      dataIndex: 'dateOfBirth',
-      render: (dateOfBirth) => `${dateOfBirth}`,
-      width: '8%'
-    },
-    {
-      title: 'Gender',
-      dataIndex: 'gender',
+      title: 'Trạng thái',
+      dataIndex: 'courseStatus',
       filters: [
         { text: 'Male', value: 'male' },
         { text: 'Female', value: 'female' }
       ],
-      width: '6%'
+      width: '10%'
     },
     {
-      title: 'Giáo họ',
-      dataIndex: 'parish_cluster',
-      // filters: [
-      //   { text: 'Male', value: 'male' },
-      //   { text: 'Female', value: 'female' }
-      // ],
-      render: (parish_cluster) => `${parish_cluster.name}`,
+      title: 'Số lượng',
+      dataIndex: 'totalMember',
+      render: (totalMember) => `${totalMember}`,
       width: '8%'
     },
     {
       title: 'Chức năng',
-      width: '4%',
+      width: '8%',
       render: (_, record) => (
         <>
           <Space size='middle'>
@@ -102,7 +104,7 @@ const useLogic = () => {
   ];
 
   return {
-    parishioners,
+    courses,
     tableKey,
     columns,
     isMiddleScreen,

@@ -182,7 +182,7 @@ const OverviewPage = () => {
 
   return (
     <div className='flex justify-center'>
-      <div className='w-[50%] h-[500px] mt-6 bg-white ml-8'>
+      <div className='w-[50%] h-[690px] mt-6 bg-white ml-8'>
         <Column
           {...config}
           label={{

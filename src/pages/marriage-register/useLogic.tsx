@@ -1,11 +1,11 @@
-import { fetchParishioners } from '@/services/apis/parishioner';
 import { Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
+import { fetchCoupleRegistration } from "@/services/apis/course";
 
 const useLogic = () => {
-  const [parishioners, setParishioner] = useState<any[]>([]);
+  const [couple, setCouple] = useState<any[]>([]);
   const [tableKey, setTableKey] = useState(0);
   const [isMiddleScreen, setIsMiddleScreen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
@@ -34,75 +34,82 @@ const useLogic = () => {
       setTableKey((prevKey) => prevKey + 1);
     }
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const getAllParishioners = async () => {
+    const getAllCoupleRegis = async () => {
       try {
-        const response = await fetchParishioners();
-        setParishioner(response.data);
+        const response = await fetchCoupleRegistration();
+        setCouple(response.data);
         console.log('Parishioners:', response.data);
       } catch (error) {
         console.log('Error fetching parishioners:', error);
       }
     };
 
-    getAllParishioners();
+    getAllCoupleRegis();
   }, []);
 
   const columns: ColumnsType<DataType> = [
     {
-      title: 'Họ và tên',
-      dataIndex: 'fullname',
+      title: 'Tên bên nam',
+      dataIndex: 'parishioner1',
       sorter: true,
-      render: (fullname) => `${fullname}`,
-      width: '10%'
+      render: (parishioner1) => `${parishioner1.fullname}`,
+      width: '20%'
     },
     {
-      title: 'Số điện thoại',
-      dataIndex: 'phonenumber',
-      width: '8%'
+      title: 'Tên bên nữ',
+      dataIndex: 'parishioner2',
+      sorter: true,
+      render: (parishioner2) => `${parishioner2.fullname}`,
+      width: '20%'
     },
     {
-      title: 'Ngày sinh',
-      dataIndex: 'dateOfBirth',
-      render: (dateOfBirth) => `${dateOfBirth}`,
-      width: '8%'
+      title: 'Ngày đăng ký',
+      dataIndex: 'createdAt',
+      width: '20%'
     },
     {
-      title: 'Gender',
-      dataIndex: 'gender',
+      title: 'Lớp học',
+      dataIndex: 'courseId',
+      render: (courseId) => `${courseId}`,
+      width: '20%'
+    },
+    {
+      title: 'Trạng thái',
+      dataIndex: 'status',
       filters: [
         { text: 'Male', value: 'male' },
         { text: 'Female', value: 'female' }
       ],
-      width: '6%'
+      width: '20%'
     },
-    {
-      title: 'Giáo họ',
-      dataIndex: 'parish_cluster',
-      // filters: [
-      //   { text: 'Male', value: 'male' },
-      //   { text: 'Female', value: 'female' }
-      // ],
-      render: (parish_cluster) => `${parish_cluster.name}`,
-      width: '8%'
-    },
-    {
-      title: 'Chức năng',
-      width: '4%',
-      render: (_, record) => (
-        <>
-          <Space size='middle'>
-            <a onClick={() => showDeleteModal(record)}>
-              {' '}
-              <DeleteOutlined style={{ fontSize: '18px' }} />
-            </a>
-          </Space>
-        </>
-      )
-    }
+    // {
+    //   title: 'Giáo họ',
+    //   dataIndex: 'parish_cluster',
+    //   // filters: [
+    //   //   { text: 'Male', value: 'male' },
+    //   //   { text: 'Female', value: 'female' }
+    //   // ],
+    //   render: (parish_cluster) => `${parish_cluster.name}`,
+    //   width: '20%'
+    // },
+    // {
+    //   title: 'Chức năng',
+    //   width: '20%',
+    //   render: (_, record) => (
+    //     <>
+    //       <Space size='middle'>
+    //         <a onClick={() => showDeleteModal(record)}>
+    //           {' '}
+    //           <DeleteOutlined style={{ fontSize: '18px' }} />
+    //         </a>
+    //       </Space>
+    //     </>
+    //   )
+    // }
   ];
 
   return {
-    parishioners,
+    couple,
     tableKey,
     columns,
     isMiddleScreen,

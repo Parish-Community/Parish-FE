@@ -10,14 +10,16 @@ import { saveUserData } from '../../hooks/actions/userActions';
 import { jwtDecode } from "jwt-decode";
 
 interface JwtPayload {
-  accountId: number;
-  fullname: string;
-  email: string;
-  phonenumber: string;
-  roleId: number;
-  role: string;
-  isActive: boolean;
-  firstLogin: boolean;
+  payload: {
+    accountId: number;
+    fullname: string;
+    email: string;
+    phonenumber: string;
+    roleId: number;
+    role: string;
+    isActive: boolean;
+    firstLogin: boolean;
+  };
 }
 
 const LoginPage = () => {
@@ -32,13 +34,23 @@ const LoginPage = () => {
       setLoading(true);
 
       const response = await axios.post('http://localhost:8888/api/v1/auth/login', formData);
-      // check response role if role is not admin then return error
-      // if (response.data.role !== 'admin') {
-      //   message.error('You are not admin');
-      //   setLoading(false);
-      //   return;
-      // }
+
+      if (response.data.status !== 200) {
+        message.error('Login failed. Please check your phone number and password.');
+        setLoading(false);
+        return;
+      }
+
       const decodedToken = jwtDecode<JwtPayload>(response.data.data.accessToken);
+
+      if (decodedToken?.payload.role !== 'admin') {
+        message.error('You are not role admin. Please login with role admin.');
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem('access_token', response.data.data.accessToken);
+      // const decodedToken = jwtDecode<JwtPayload>(response.data.data.accessToken);
       dispatch(saveUserData(decodedToken, response.data.data.accessToken));
 
       form.resetFields();

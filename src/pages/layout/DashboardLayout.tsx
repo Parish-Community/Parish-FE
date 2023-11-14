@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 // import { Outlet } from 'react-router-dom';
-import { UnorderedListOutlined, DollarOutlined, TeamOutlined, UserOutlined, HomeOutlined } from '@ant-design/icons';
+import {
+  UnorderedListOutlined,
+  DollarOutlined,
+  TeamOutlined,
+  UserOutlined,
+  HomeOutlined,
+  LogoutOutlined
+} from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Layout, Menu } from 'antd';
 import logoTop from '@/assets/images/logoTop.svg';
@@ -37,10 +44,21 @@ const items: MenuItem[] = [
     getItem('Danh sách đăng ký', '4', 'hôn-nhân/danh-sách-đăng-ký'),
     getItem('Lớp hôn nhân', '5', 'hôn-nhân/lớp-hôn-nhân')
   ]),
-  getItem('Donation', '6', 'donation', <DollarOutlined />)
+  getItem('Donation', '6', 'donation', <DollarOutlined />),
+  getItem('Logout', '7', 'logout', <LogoutOutlined />)
 ];
 
-const DashboardLayout = (prop) => {
+const DashboardLayout = (prop: {
+  children:
+    | string
+    | number
+    | boolean
+    | React.ReactElement<any, string | React.JSXElementConstructor<any>>
+    | Iterable<React.ReactNode>
+    | React.ReactPortal
+    | null
+    | undefined;
+}) => {
   const [collapsed, setCollapsed] = useState(false);
 
   const navigate = useNavigate();
@@ -50,12 +68,8 @@ const DashboardLayout = (prop) => {
   };
 
   // const handleLogout = () => {
-  //   localStorage.removeItem('token');
+  //   localStorage.removeItem('access_token');
   //   navigate('/auth/login');
-  // };
-
-  // const onConfirm = () => {
-  //   console.log('confirm');
   // };
 
   return (
@@ -79,10 +93,10 @@ const DashboardLayout = (prop) => {
         >
           <div className='demo-logo-vertical' />
           <Menu theme='light' defaultSelectedKeys={['1']} mode='inline'>
-            {items.map((item) =>
-              item.children ? (
+            {items.map((item: any) =>
+              item?.children ? (
                 <Menu.SubMenu key={item.key} icon={item.icon} title={item.label}>
-                  {item.children.map((subItem) => (
+                  {item.children.map((subItem: any) => (
                     <Menu.Item key={subItem.key} onClick={() => handleMenuItemClick(subItem.path)}>
                       {subItem.label}
                     </Menu.Item>
