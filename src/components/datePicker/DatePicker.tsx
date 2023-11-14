@@ -21,7 +21,7 @@ const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 const DatePickerComponent = () => {
   return (
     <Space direction='vertical' size={12}>
-      <DatePicker className='w-[328px]' defaultValue={dayjs('01/01/2015', dateFormatList[0])} format={dateFormatList} />
+      <DatePicker className='w-[218px]' defaultValue={dayjs('01/01/2015', dateFormatList[0])} format={dateFormatList} />
     </Space>
   );
 };

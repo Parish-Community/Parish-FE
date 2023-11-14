@@ -5,6 +5,7 @@ import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
 import CoreDrawer from '@/components/Drawer';
 import useLogic from './useLogic';
 import { Table } from '@/components/table';
+import DrawerClassComponent from "@/components/Drawer/DrawerClass";
 
 const { Header, Content } = Layout;
 
@@ -14,22 +15,20 @@ const CourseScreen = () => {
 
   const {
     courses,
+    teacherOpts,
     tableKey,
     columns,
     isMiddleScreen,
     deleteModalVisible,
     selectedRecord,
     handleDeleteConfirm,
-    handleDeleteCancel
+    handleDeleteCancel,
+    onFinish
   } = useLogic();
 
   const {
     token: { colorBgContainer }
   } = theme.useToken();
-
-  const handleClickBtn = () => {
-    console.log('click');
-  };
 
   const showDrawer = () => {
     setOpen(true);
@@ -39,10 +38,12 @@ const CourseScreen = () => {
     setOpen(false);
   };
 
+  const listBUttons = [{ label: 'Lớp học', htmlType: 'submit', onClick: showDrawer, typeBtn: 'primary' }];
+
   return (
     <main>
       <Header style={{ padding: 0, background: colorBgContainer }}>
-        {/* <HeaderChristian buttons={listBUttons} /> */}
+        <HeaderChristian buttons={listBUttons} />
       </Header>
       <Content style={{ margin: '26px 18px' }}>
         <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
@@ -56,14 +57,21 @@ const CourseScreen = () => {
           />
         </div>
       </Content>
-      <CoreDrawer title='Thêm thông tin giáo dân' open={open} onClose={onClose} form={form} />
+      <DrawerClassComponent
+        title='Thêm lớp giáo lý hôn nhân'
+        open={open}
+        onClose={onClose}
+        form={form}
+        teacherOption={teacherOpts}
+        onFinishSubmit={onFinish}
+      />
       <Modal
         title='Confirm Delete'
         visible={deleteModalVisible}
         onOk={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
       >
-        <p>Are you sure you want to delete {selectedRecord && selectedRecord.fullname} ?</p>
+        <p>Are you sure you want to delete {selectedRecord && selectedRecord.courseName} ?</p>
         {/* <p>{selectedRecord && selectedRecord.fullname}</p> */}
         {/* Display additional information about the record if needed */}
         {/* For example: <p>{selectedRecord && selectedRecord.fullname}</p> */}

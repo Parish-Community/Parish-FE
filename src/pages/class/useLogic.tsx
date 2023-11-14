@@ -2,7 +2,10 @@ import { Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
-import { fetchCourses } from "@/services/apis/course";
+import { createCourse, fetchCourses } from '@/services/apis/course';
+import { SelectBoxOptionProps } from '@/core/selectBox';
+import { fetchParishionerWithMonk } from '@/services/apis/parishioner';
+import { formatYYMMDD } from '@/utils/date';
 
 const useLogic = () => {
   const [courses, setCourses] = useState<any[]>([]);
@@ -10,6 +13,7 @@ const useLogic = () => {
   const [isMiddleScreen, setIsMiddleScreen] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState<any | null>(null);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [teacherOpts, setTeacherOpts] = useState<SelectBoxOptionProps[]>([]);
 
   const showDeleteModal = (record: any) => {
     setSelectedRecord(record);
@@ -37,8 +41,17 @@ const useLogic = () => {
     const getAllParishioners = async () => {
       try {
         const response = await fetchCourses();
+        const getTeacher = await fetchParishionerWithMonk();
+
+        if (getTeacher) {
+          const options = getTeacher?.data.map((teacher: any) => ({
+            label: teacher.fullname,
+            value: teacher.id
+          }));
+          setTeacherOpts(options);
+        }
+
         setCourses(response.data);
-        console.log('Parishioners:', response.data);
       } catch (error) {
         console.log('Error fetching parishioners:', error);
       }
@@ -103,15 +116,37 @@ const useLogic = () => {
     }
   ];
 
+  const onFinish = async (values: any) => {
+    const startDate = formatYYMMDD(values.startAndEndDate[0]) || '';
+    const endDate = formatYYMMDD(values?.startAndEndDate[1]) || '';
+
+    const payload = {
+      courseName: values.courseName,
+      startDate,
+      endDate,
+      profileId: Number(values.profileId),
+      courseStatus: 'open'
+    };
+
+    const submitCourse = await createCourse(payload);
+
+    if (submitCourse) {
+      console.log('submitCourse', submitCourse);
+      setTableKey((prevKey) => prevKey + 1);
+    }
+  };
+
   return {
     courses,
+    teacherOpts,
     tableKey,
     columns,
     isMiddleScreen,
     deleteModalVisible,
     selectedRecord,
     handleDeleteConfirm,
-    handleDeleteCancel
+    handleDeleteCancel,
+    onFinish
   };
 };
 
