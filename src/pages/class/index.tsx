@@ -5,7 +5,7 @@ import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
 import CoreDrawer from '@/components/Drawer';
 import useLogic from './useLogic';
 import { Table } from '@/components/table';
-import DrawerClassComponent from "@/components/Drawer/DrawerClass";
+import DrawerClassComponent from '@/components/Drawer/DrawerClass';
 
 const { Header, Content } = Layout;
 

@@ -10,10 +10,13 @@ export const fetchCoupleRegistration = async () => {
   }
 };
 
-export const fetchCourses = async () => {
+export const fetchCourses = async (query?: any) => {
   setBearerToken(localStorage.getItem('access_token'));
   try {
-    const response = await http.get(`/course`);
+    const params = {
+      courseStatus: query
+    };
+    const response = await http.get(`/course`, { params });
     return response.data;
   } catch (error) {
     console.error('Error fetching course:', error);

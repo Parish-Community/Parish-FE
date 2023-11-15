@@ -1,39 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './styles.css';
-import qs from 'qs';
 import { Layout, theme, Form } from 'antd';
-import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
-import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
-import CoreDrawer from '@/components/Drawer';
-import DrawerChristenComponent from "@/components/Drawer/DrawerChristen";
-import useLogic from "./useLogic";
+import useLogic from './useLogic';
 import { Table } from '@/components/table';
+import { useNavigate } from 'react-router-dom';
+import DrawerCoupleComponent from '@/components/Drawer/DrawerCouple';
 
 const { Header, Content } = Layout;
 
 const MarriageRegister = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
 
-  const {
-    couple,
-    tableKey,
-    columns,
-    isMiddleScreen,
-    deleteModalVisible,
-    selectedRecord,
-    handleDeleteConfirm,
-    handleDeleteCancel
-  } = useLogic();
+  const { couple, tableKey, columns, listOpenClass, isMiddleScreen } = useLogic();
 
   const {
     token: { colorBgContainer }
   } = theme.useToken();
-
-  const handleClickBtn = () => {
-    console.log('click');
-  };
 
   const showDrawer = () => {
     setOpen(true);
@@ -57,10 +42,22 @@ const MarriageRegister = () => {
             size={isMiddleScreen ? 'middle' : 'small'}
             pageSizeOptions={['10', '20', '30']}
             showSizeChanger={false}
+            onRow={(record) => ({
+              onClick: () => {
+                // navigate(`/page-404`);
+                showDrawer();
+              }
+            })}
           />
         </div>
       </Content>
-      <DrawerChristenComponent title='Thêm thông tin rửa tội' open={open} onClose={onClose} form={form} />
+      <DrawerCoupleComponent
+        title='Chi tiết đăng kí giáo lý hôn nhân'
+        open={open}
+        onClose={onClose}
+        form={form}
+        listOpenClass={listOpenClass}
+      />
     </main>
   );
 };
