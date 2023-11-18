@@ -42,3 +42,18 @@ export const createCourse = async (data: any) => {
     console.error('Error creating course:', error);
   }
 };
+
+export const acceptRegistration = async (id: string, data: any) => {
+  setBearerToken(localStorage.getItem('access_token'));
+  try {
+    console.log(data);
+    const payload = {
+      courseId: Number(data.courseId)
+    };
+    console.log(payload);
+    const response = await http.patch(`/course/couple-registration/${id}/accept`, payload);
+    return response.data;
+  } catch (error) {
+    console.error('Error accepting registration:', error);
+  }
+};

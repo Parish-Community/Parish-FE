@@ -12,6 +12,7 @@ const { Header, Content } = Layout;
 const MarriageRegister = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [recordCouple, setRecordCouple] = useState<any>({});
   const [form] = Form.useForm();
 
   const { couple, tableKey, columns, listOpenClass, isMiddleScreen } = useLogic();
@@ -20,8 +21,10 @@ const MarriageRegister = () => {
     token: { colorBgContainer }
   } = theme.useToken();
 
-  const showDrawer = () => {
+  const showDrawer = (record: any) => {
     setOpen(true);
+    setRecordCouple(record);
+    console.log('record', record);
   };
 
   const onClose = () => {
@@ -43,9 +46,9 @@ const MarriageRegister = () => {
             pageSizeOptions={['10', '20', '30']}
             showSizeChanger={false}
             onRow={(record) => ({
-              onClick: () => {
+              onClick: async () => {
                 // navigate(`/page-404`);
-                showDrawer();
+                await showDrawer(record);
               }
             })}
           />
@@ -57,6 +60,7 @@ const MarriageRegister = () => {
         onClose={onClose}
         form={form}
         listOpenClass={listOpenClass}
+        coupleRegistration={recordCouple}
       />
     </main>
   );

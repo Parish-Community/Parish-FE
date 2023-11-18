@@ -19,7 +19,7 @@ const SelectBox = (props: SelectBoxProps) => {
   ));
 
   return (
-    <Select className='w-full' {...props}>
+    <Select className='w-full' {...props} allowClear>
       {renderSelectBoxOptions}
     </Select>
   );

@@ -21,7 +21,6 @@ const useLogic = () => {
         const response = await fetchCoupleRegistration();
         const openClass = await fetchCourses('open');
         setCouple(response.data);
-        console.log('couple:', response.data);
 
         if (openClass) {
           const options = openClass?.data.map((item: any) => ({
@@ -29,7 +28,6 @@ const useLogic = () => {
             value: item.id
           }));
           setListOpenClass(options);
-          console.log('response', listOpenClass);
         }
       } catch (error) {
         console.log('Error fetching parishioners:', error);
@@ -61,8 +59,8 @@ const useLogic = () => {
     },
     {
       title: 'Lớp học',
-      dataIndex: 'courseId',
-      render: (courseId) => `${courseId}`,
+      dataIndex: 'course',
+      render: (course) => `${course ? course.courseName : 'none'}`,
       width: '20%'
     },
     {
