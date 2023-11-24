@@ -75,7 +75,6 @@ const DrawerClassComponent = (props: DrawerChristenProps) => {
                 label='Thời gian lớp học'
                 rules={[{ required: true, message: 'Please enter start date' }]}
               >
-                {/* <DatePickerComponent /> */}
                 <DatePicker format={dateFormatList} />
               </Form.Item>
             </Col>

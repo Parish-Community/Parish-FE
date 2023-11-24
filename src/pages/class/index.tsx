@@ -12,6 +12,7 @@ const { Header, Content } = Layout;
 const CourseScreen = () => {
   const [open, setOpen] = useState(false);
   const [form] = Form.useForm();
+  console.log("form",form)
 
   const {
     courses,

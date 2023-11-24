@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Col, Drawer, Form, FormInstance, Input, Row, Select, Space, Modal } from 'antd';
-import CoreButton from './Button';
-import DatePickerComponent from './datePicker/DatePicker';
 import { UploadOutlined, DeleteFilled } from '@ant-design/icons';
 import avatarDefault from '@/assets/images/Avatar.jpeg';
 import { fetchParishCluster } from '@/services/apis/parishioner';
@@ -10,6 +8,10 @@ import SelectBox, { SelectBoxOptionProps } from '@/core/selectBox';
 import { GENDER } from '@/core/constants/enum';
 import { dateFormatList, formatDateReq, formatYYMMDD } from "@/utils/date";
 import { DatePicker } from "@/core/input";
+import CoreButton from "@/components/Button";
+import DatePickerComponent from "@/components/datePicker/DatePicker";
+import { useDispatch } from "react-redux";
+import { saveParishCluster } from "@/hooks/parishClusterSlice";
 
 interface CoreDrawerProps {
   title: string;
@@ -17,15 +19,17 @@ interface CoreDrawerProps {
   onClose: () => void;
   form: FormInstance<unknown>;
   onFinishSubmit: any;
+  record?: any;
 }
 
 const { Option } = Select;
 
-const CoreDrawer = (props: CoreDrawerProps) => {
+const DrawerEdit = (props: CoreDrawerProps) => {
   const [image, setImage] = useState('');
   const [file, setFile] = useState<any>(null);
   const [parishCluster, setParishCluster] = useState<any[]>([]);
   const [dateOfBirth, setDateOfBirth] = useState<any>(null);
+  // const dispatch = useDispatch();
 
   const getBase64 = (img: any, callback: any) => {
     const reader = new FileReader();
@@ -47,7 +51,15 @@ const CoreDrawer = (props: CoreDrawerProps) => {
 
   useEffect(() => {
     getParishCluster();
-  }, []);
+
+    if (props.record) {
+      console.log('props.record', props.record);
+      props.form.setFieldsValue(props.record);
+      props.form.setFieldsValue({
+        date: props.record.dateOfBirth ? formatDateReq(props.record.dateOfBirth) : null
+      });
+    }
+  }, [props.record]);
 
   const onFinish = () => {
     props.form.validateFields();
@@ -73,13 +85,10 @@ const CoreDrawer = (props: CoreDrawerProps) => {
 
   const onImageChange = (event: any) => {
     if (event.target.files && event.target.files[0]) {
-      // console.log('event', event.target.files[0]);
       setFile(event.target.files[0]);
       setImage(URL.createObjectURL(event.target.files[0]));
-      // getBase64(event.target.files[0], (imageUrl: any) => setImage(imageUrl));
     }
   };
-  console.log('image', image);
 
   const onRemoveAvatar = () => {
     setImage('');
@@ -168,7 +177,7 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                 label='Full Name'
                 rules={[{ required: true, message: 'Please enter user full name' }]}
               >
-                <Input placeholder='Please enter user full name' />
+                <Input placeholder='Please enter user full name' defaultValue={props.record?.fullname} />
               </Form.Item>
             </Col>
           </Row>
@@ -195,7 +204,7 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                   }))}
                   label='Giáo họ'
                   name='parish_clusterId'
-                  placeholder='Select a teacher'
+                  placeholder='chọn giáo họ'
                 />
               </Form.Item>
             </Col>
@@ -207,7 +216,7 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                 label='Date of birth'
                 rules={[{ required: false, message: 'Please enter date of birth' }]}
               >
-                <DatePickerComponent onDateChange={handleDateChange} />
+                <DatePickerComponent recordDate={props?.record?.dateOfBirth} onDateChange={handleDateChange} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -244,9 +253,9 @@ const CoreDrawer = (props: CoreDrawerProps) => {
               <Form.Item
                 name='god_parent'
                 label='Người đỡ đầu '
-                rules={[{ required: true, message: 'Please enter your Người đỡ đầu ' }]}
+                rules={[{ required: true, message: 'Please enter người đỡ đầu ' }]}
               >
-                <Input placeholder='Please enter your Người đỡ đầu ' />
+                <Input placeholder='Please enter người đỡ đầu ' />
               </Form.Item>
             </Col>
           </Row>
@@ -258,7 +267,7 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                 rules={[
                   {
                     required: true,
-                    message: 'please enter your Address'
+                    message: 'please enter your address'
                   }
                 ]}
               >
@@ -272,11 +281,11 @@ const CoreDrawer = (props: CoreDrawerProps) => {
   );
 };
 
-CoreDrawer.propTypes = {
+DrawerEdit.propTypes = {
   title: PropTypes.string.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired
 };
 
-export default CoreDrawer;  
+export default DrawerEdit;
 

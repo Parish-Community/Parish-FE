@@ -7,16 +7,18 @@ interface HeaderChristianProps {
   htmlType: string;
   onClick: () => void;
   typeBtn: string;
+  isUploadFile?: boolean;
 }
 
-const HeaderChristian = (props: { buttons: HeaderChristianProps[] }) => {
+const HeaderChristian = (props: { buttons?: HeaderChristianProps[]; children: any }) => {
   const handleClick = (onclickFunction: () => void) => {
     onclickFunction();
   };
 
   return (
     <div className='flex justify-end mr-6'>
-      {props.buttons.map((button: HeaderChristianProps) => {
+      <div className='mr-4'>{props.children}</div>
+      {props?.buttons?.map((button: HeaderChristianProps) => {
         return (
           <CoreButton
             key={button.label}

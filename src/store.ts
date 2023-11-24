@@ -1,8 +1,38 @@
-import { createStore, applyMiddleware } from 'redux';
-import { composeWithDevTools } from '@redux-devtools/extension';
-import thunk from 'redux-thunk';
-import rootReducer from './hooks/reducers';
+import { configureStore } from '@reduxjs/toolkit';
+import userReducer from './hooks/reducers/userReducer';
+import parishClusterReducer from './hooks/reducers/parishClusterReducer';
 
-const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
+const loadState = () => {
+  try {
+    const serializedState = localStorage.getItem('state');
+    if (serializedState === null) {
+      return undefined;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return undefined;
+  }
+};
 
-export default store;
+const saveState = (state: any) => {
+  const serializedState = JSON.stringify(state);
+  localStorage.setItem('state', serializedState);
+};
+
+const persistedState = loadState();
+
+// Define Root State and Dispatch Types
+export const store = configureStore({
+  reducer: {
+    user: userReducer,
+    cluster: parishClusterReducer
+  },
+  preloadedState: persistedState
+});
+
+store.subscribe(() => {
+  saveState(store.getState());
+});
+
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

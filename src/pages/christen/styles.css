@@ -1,3 +1,41 @@
 .button-login {
   background-color: #D7B300 !important;
 }
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
+}
+
+.custom-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  padding: 8px;
+  text-align: left;
+}
+
+.custom-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.custom-table td:last-child {
+  color: rgb(30, 28, 28);
+  font-weight: bold;
+  padding: 8px;
+  text-align: center;
+}
+
+.custom-table td:last-child:contains('Accepted') {
+  background-color: #4caf50;
+}
+
+.custom-table td:last-child:contains('Pending') {
+  background-color: #ff9800;
+}

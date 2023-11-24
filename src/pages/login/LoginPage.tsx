@@ -50,8 +50,12 @@ const LoginPage = () => {
       }
 
       localStorage.setItem('access_token', response.data.data.accessToken);
-      // const decodedToken = jwtDecode<JwtPayload>(response.data.data.accessToken);
-      dispatch(saveUserData(decodedToken, response.data.data.accessToken));
+      const payload = {
+        userData: decodedToken,
+        accessToken: response.data.data.accessToken,
+        isAuthenticated: true
+      }
+      dispatch(saveUserData(payload));
 
       form.resetFields();
       setLoading(false);

@@ -1,19 +1,30 @@
-const initialState = {
+import { createReducer } from '@reduxjs/toolkit';
+import { logoutUser, saveUserData } from '../actions/userActions';
+
+interface UserState {
+  userData: any;
+  accessToken: null | string;
+  isAuthenticated: boolean;
+}
+
+const initialState: UserState = {
   userData: null,
-  access_token: null
+  accessToken: '' || null,
+  isAuthenticated: false
 };
 
-const userReducer = (state = initialState, action: { type: any; payload: any; access_token: any }) => {
-  switch (action.type) {
-    case 'SAVE_USER_LOGIN_DATA':
-      return {
-        ...state,
-        userData: action.payload,
-        access_token: action.access_token
-      };
-    default:
-      return state;
-  }
-};
+const userReducer = createReducer(initialState, (builder) => {
+  builder
+    .addCase(saveUserData, (state, action) => {
+      state.userData = action.payload.userData;
+      state.accessToken = action.payload.accessToken;
+      state.isAuthenticated = true;
+    })
+    .addCase(logoutUser, (state) => {
+      state.userData = null;
+      state.accessToken = null;
+      state.isAuthenticated = false;
+    });
+});
 
 export default userReducer;

@@ -7,3 +7,23 @@ export const formatYYMMDD = (date: Date) => {
 };
 
 export const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
+
+export function formatDateReq(dateString: any) {
+  const parts = dateString.split('/');
+  if (parts.length === 3) {
+    const [year, month, day] = parts;
+    const formattedDate = new Date(`${year}-${month}-${day}`);
+    const formattedDay = String(formattedDate.getDate()).padStart(2, '0');
+    const formattedMonth = String(formattedDate.getMonth() + 1).padStart(2, '0');
+    const formattedYear = formattedDate.getFullYear();
+
+    return `${formattedYear}-${formattedMonth}-${formattedDay}`;
+  }
+  return dateString;
+}
+
+export function formatDateString(dateString: any) {
+  const [year, month, day] = dateString.split('-');
+  const formattedDate = `${day}/${month}/${year}`;
+  return formattedDate;
+}

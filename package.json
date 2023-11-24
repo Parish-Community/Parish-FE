@@ -16,6 +16,7 @@
   "dependencies": {
     "@ant-design/plots": "^1.2.5",
     "@redux-devtools/extension": "^3.2.5",
+    "@reduxjs/toolkit": "^1.9.7",
     "@types/qs": "^6.9.7",
     "antd": "^5.8.3",
     "axios": "^1.4.0",
