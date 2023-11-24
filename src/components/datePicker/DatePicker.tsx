@@ -38,7 +38,7 @@ const DatePickerComponent = (props: DateTimeProps) => {
   return (
     <Space direction='vertical' size={12}>
       <DatePicker
-        className='w-[218px]'
+        className='w-[328px]'
         defaultValue={selectedDate}
         format={dateFormatList}
         onChange={handleDateChange}

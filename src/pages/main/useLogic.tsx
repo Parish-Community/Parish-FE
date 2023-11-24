@@ -1,4 +1,4 @@
-import { createParishioner, deleteParishioner, fetchParishioners } from '@/services/apis/parishioner';
+import { createParishioner, deleteParishioner, fetchParishioners, updateParishioner } from '@/services/apis/parishioner';
 import { Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
@@ -178,6 +178,16 @@ const useLogic = () => {
     console.log('Data submit', values);
     const res = await createParishioner(values);
     console.log('res', res?.data);
+    setIsRefresh(!isRefresh);
+    setOpen(!open);
+  };
+
+  const onFinishUpdate = async (values: any) => {
+    console.log('Data submit', values);
+    const res = await updateParishioner(values);
+    console.log('res', res?.data);
+    setIsRefresh(!isRefresh);
+    setOpenDrawerEdit(!openDrawerEdit);
   };
 
   return {
@@ -198,7 +208,8 @@ const useLogic = () => {
     showDrawer,
     onCloseDrawer,
     onCloseDrawerEdit,
-    openDrawerEdit
+    openDrawerEdit,
+    onFinishUpdate
   };
 };
 

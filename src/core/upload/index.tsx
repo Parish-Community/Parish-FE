@@ -1,11 +1,11 @@
 import React from 'react';
-import { UploadOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { Button, message, Upload } from 'antd';
 
 const props: UploadProps = {
   name: 'file',
-  action: 'http://localhost:8888/api/v1/parishioner/import-parishioner',
+  // action: 'http://localhost:8888/api/v1/parishioner/import-parishioner',
+  action: 'http://localhost:8888/api/v1/baptism/import',
   headers: {
     authorization: 'authorization-text'
   },

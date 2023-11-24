@@ -29,7 +29,8 @@ const ChristenPage = () => {
     selectedRecord,
     openDrawerEdit,
     onClose,
-    currentPage
+    currentPage,
+    onFinishAccepted
   } = useLogic();
 
   const listBUttons = [
@@ -65,6 +66,7 @@ const ChristenPage = () => {
         form={form}
         record={selectedRecord}
         page={currentPage}
+        onFinishSubmit={onFinishAccepted}
       />
       <Modal
         title='Confirm Delete'

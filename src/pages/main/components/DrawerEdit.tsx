@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Drawer, Form, FormInstance, Input, Row, Select, Space, Modal } from 'antd';
+import { Button, Col, Drawer, Form, FormInstance, Input, Row, Select, Space, Modal, DatePicker } from 'antd';
 import { UploadOutlined, DeleteFilled } from '@ant-design/icons';
 import avatarDefault from '@/assets/images/Avatar.jpeg';
 import { fetchParishCluster } from '@/services/apis/parishioner';
 import SelectBox, { SelectBoxOptionProps } from '@/core/selectBox';
 import { GENDER } from '@/core/constants/enum';
-import { dateFormatList, formatDateReq, formatYYMMDD } from "@/utils/date";
-import { DatePicker } from "@/core/input";
-import CoreButton from "@/components/Button";
-import DatePickerComponent from "@/components/datePicker/DatePicker";
-import { useDispatch } from "react-redux";
-import { saveParishCluster } from "@/hooks/parishClusterSlice";
+import { formatDateReq, formatYYMMDD } from '@/utils/date';
+import CoreButton from '@/components/Button';
+import { useDispatch } from 'react-redux';
+import { saveParishCluster } from '@/hooks/parishClusterSlice';
+
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
 interface CoreDrawerProps {
   title: string;
@@ -28,7 +32,6 @@ const DrawerEdit = (props: CoreDrawerProps) => {
   const [image, setImage] = useState('');
   const [file, setFile] = useState<any>(null);
   const [parishCluster, setParishCluster] = useState<any[]>([]);
-  const [dateOfBirth, setDateOfBirth] = useState<any>(null);
   // const dispatch = useDispatch();
 
   const getBase64 = (img: any, callback: any) => {
@@ -56,14 +59,17 @@ const DrawerEdit = (props: CoreDrawerProps) => {
       console.log('props.record', props.record);
       props.form.setFieldsValue(props.record);
       props.form.setFieldsValue({
-        date: props.record.dateOfBirth ? formatDateReq(props.record.dateOfBirth) : null
+        dateOfBirth: dayjs(props.record.dateOfBirth),
+        god_parent: props.record?.god_parent || 'Chưa có'
       });
+      setImage(props.record?.avatar || '');
     }
   }, [props.record]);
 
   const onFinish = () => {
     props.form.validateFields();
     const payload = {
+      id: props.record?.id,
       fullname: (props.form.getFieldsValue() as { fullname: string }).fullname,
       christianName: (props.form.getFieldsValue() as { christianName: string }).christianName,
       phonenumber: (props.form.getFieldsValue() as { phonenumber: string }).phonenumber,
@@ -73,14 +79,14 @@ const DrawerEdit = (props: CoreDrawerProps) => {
       address: (props.form.getFieldsValue() as { address: string }).address,
       gender: (props.form.getFieldsValue() as { gender: string }).gender,
       parish_clusterId: (props.form.getFieldsValue() as { parish_clusterId: number }).parish_clusterId,
-      avatar: file,
-      dateOfBirth: dateOfBirth
+      // avatar: file,
+      dateOfBirth: (props.form.getFieldsValue() as { dateOfBirth: any }).dateOfBirth.format('YYYY-MM-DD')
     };
     console.log('Received values of form: ', payload);
     props.onFinishSubmit(payload);
-    // Modal.success({
-    //   content: 'You have successfully added parishioners.'
-    // });
+    Modal.success({
+      content: 'You have update successfully parishioners'
+    });
   };
 
   const onImageChange = (event: any) => {
@@ -92,11 +98,6 @@ const DrawerEdit = (props: CoreDrawerProps) => {
 
   const onRemoveAvatar = () => {
     setImage('');
-  };
-
-  const handleDateChange = (date: any) => {
-    console.log('Selected date:', date);
-    setDateOfBirth(date);
   };
 
   return (
@@ -212,11 +213,11 @@ const DrawerEdit = (props: CoreDrawerProps) => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name='date'
+                name='dateOfBirth'
                 label='Date of birth'
                 rules={[{ required: false, message: 'Please enter date of birth' }]}
               >
-                <DatePickerComponent recordDate={props?.record?.dateOfBirth} onDateChange={handleDateChange} />
+                <DatePicker className='w-[318px]' format={dateFormatList} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -258,20 +259,9 @@ const DrawerEdit = (props: CoreDrawerProps) => {
                 <Input placeholder='Please enter người đỡ đầu ' />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
-              <Form.Item
-                name='address'
-                label='Address'
-                rules={[
-                  {
-                    required: true,
-                    message: 'please enter your address'
-                  }
-                ]}
-              >
-                <Input.TextArea rows={2} placeholder='please enter address' />
+            <Col span={12}>
+              <Form.Item name='address' label='Địa chỉ' rules={[{ required: true, message: 'Please enter address' }]}>
+                <Input placeholder='Please enter address' />
               </Form.Item>
             </Col>
           </Row>
@@ -288,4 +278,3 @@ DrawerEdit.propTypes = {
 };
 
 export default DrawerEdit;
-

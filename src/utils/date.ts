@@ -9,7 +9,7 @@ export const formatYYMMDD = (date: Date) => {
 export const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
 export function formatDateReq(dateString: any) {
-  const parts = dateString.split('/');
+  const parts = dateString.toString().split('/');
   if (parts.length === 3) {
     const [year, month, day] = parts;
     const formattedDate = new Date(`${year}-${month}-${day}`);

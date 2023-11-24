@@ -66,14 +66,13 @@ const CoreDrawer = (props: CoreDrawerProps) => {
     };
     console.log('Received values of form: ', payload);
     props.onFinishSubmit(payload);
-    // Modal.success({
-    //   content: 'You have successfully added parishioners.'
-    // });
+    Modal.success({
+      content: 'You have successfully added parishioners'
+    });
   };
 
   const onImageChange = (event: any) => {
     if (event.target.files && event.target.files[0]) {
-      // console.log('event', event.target.files[0]);
       setFile(event.target.files[0]);
       setImage(URL.createObjectURL(event.target.files[0]));
       // getBase64(event.target.files[0], (imageUrl: any) => setImage(imageUrl));
@@ -249,20 +248,13 @@ const CoreDrawer = (props: CoreDrawerProps) => {
                 <Input placeholder='Please enter your Người đỡ đầu ' />
               </Form.Item>
             </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={24}>
+            <Col span={12}>
               <Form.Item
                 name='address'
                 label='Address'
-                rules={[
-                  {
-                    required: true,
-                    message: 'please enter your Address'
-                  }
-                ]}
+                rules={[{ required: true, message: 'please enter your address' }]}
               >
-                <Input.TextArea rows={2} placeholder='please enter address' />
+                <Input placeholder='please enter your address' />
               </Form.Item>
             </Col>
           </Row>

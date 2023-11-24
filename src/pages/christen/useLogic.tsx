@@ -1,9 +1,9 @@
-import { deleteBaptism, fetchBaptisms } from '@/services/apis/baptism';
+import { deleteBaptism, fetchBaptisms, updateBaptism } from '@/services/apis/baptism';
 import { Space } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { useEffect, useState } from 'react';
 import { DeleteOutlined, EyeOutlined } from '@ant-design/icons';
-import { formatYYMMDD } from '@/utils/date';
+import { formatDateReq, formatYYMMDD } from '@/utils/date';
 
 const useLogic = () => {
   const [baptismData, setBaptismData] = useState<any[]>([]);
@@ -182,6 +182,26 @@ const useLogic = () => {
     }
   ];
 
+  const onFinishAccepted = async (values: any) => {
+    console.log('Data submit', values);
+    const payload = {
+      baptismId: values.id,
+      priestBaptism: values.priestBaptism,
+      dateBaptism: formatDateReq(values.dateBaptism),
+      parish_clusterId: values.parish_clusterId,
+      christianName: values.christianName,
+      fullname: values.fullname,
+      email: values.email,
+      regisname: values.regisname
+    }
+
+    console.log(payload)
+    const res = await updateBaptism(payload);
+    console.log('res', res?.data);
+    setIsRefresh(!isRefresh);
+    setOpenDrawerEdit(!openDrawerEdit);
+  };
+
   return {
     baptismData,
     columns,
@@ -195,7 +215,8 @@ const useLogic = () => {
     selectedRecord,
     openDrawerEdit,
     onClose,
-    currentPage
+    currentPage,
+    onFinishAccepted
   };
 };
 

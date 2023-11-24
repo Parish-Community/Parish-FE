@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Button, Col, Drawer, Form, FormInstance, Input, Row, Select, Space, Modal } from 'antd';
+import { Button, Col, Drawer, Form, FormInstance, Input, Row, Select, Space, Modal, DatePicker } from 'antd';
 import CoreButton from '../Button';
-import DatePickerComponent from '../datePicker/DatePicker';
 import SelectBox, { SelectBoxOptionProps } from '@/core/selectBox';
 import { fetchParishCluster } from '@/services/apis/parishioner';
 import { formatDateString, formatYYMMDD } from '@/utils/date';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(customParseFormat);
+
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
 interface DrawerChristenProps {
   title: string;
@@ -14,12 +19,13 @@ interface DrawerChristenProps {
   form: FormInstance<unknown>;
   record?: any;
   page?: number;
+  onFinishSubmit: any;
 }
 
 const { Option } = Select;
 const DrawerChristenComponent = (props: DrawerChristenProps) => {
   const [parishCluster, setParishCluster] = useState<any[]>([]);
-  const [dateBaptism, setDateBaptism] = useState<any>();
+  const [regisDate, setRegisDate] = useState<any>();
 
   const getParishCluster = async () => {
     const response = await fetchParishCluster();
@@ -47,18 +53,30 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
         priestBaptism: props.record.priestBaptism,
         parish_cluster: props.record.parishioner.parish_cluster.name,
         parish_clusterId: props.record.parish_clusterId,
-        dateOfBirth: formatDateString(props.record.parishioner.dateOfBirth),
-        dateBaptism: formatDateString(props.record?.dateBaptism || '2023-12-02')
+        dateOfBirth: dayjs(props.record.parishioner.dateOfBirth),
+        dateBaptism: dayjs(props.record?.dateBaptism || '2023-12-02')
       });
+      setRegisDate(formatDateString(props.record?.createdAt.split('T')[0]));
     }
   }, [props?.page, props.record?.id]);
 
   const onFinish = () => {
     props.form.validateFields();
     console.log('Received values of form: ', props.form.getFieldsValue());
-    // Modal.success({
-    //   content: 'You have successfully added parishioners.'
-    // });
+    const payload = {
+      id: props.record?.id,
+      priestBaptism: (props.form.getFieldsValue() as { priestBaptism: string }).priestBaptism,
+      dateBaptism: (props.form.getFieldsValue() as { dateBaptism: any }).dateBaptism,
+      parish_clusterId: (props.form.getFieldsValue() as { parish_clusterId: number }).parish_clusterId,
+      christianName: (props.form.getFieldsValue() as { christianName: string }).christianName,
+      fullname: (props.form.getFieldsValue() as { fullname: string }).fullname,
+      email: props.record?.account.email,
+      regisname: props.record?.account.fullname
+    };
+    props.onFinishSubmit(payload);
+    Modal.success({
+      content: 'You have successfully accepted'
+    });
   };
 
   return (
@@ -140,8 +158,7 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
                 label='Ngày sinh'
                 rules={[{ required: true, message: 'Please enter date of birth' }]}
               >
-                <Input className='bg-slate-200 cursor-not-allowed' placeholder='' readOnly />
-                {/* <DatePickerComponent recordDate={dateOfBirth} onDateChange={undefined} disabled={true} /> */}
+                <DatePicker className='w-[318px]' format={dateFormatList} disabled />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -191,7 +208,7 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
               <Form.Item
                 name='priestBaptism'
                 label='Cha cử hành'
-                rules={[{ required: true, message: 'Please enter your Người đỡ đầu ' }]}
+                rules={[{ required: true, message: 'Please enter cha cử hành' }]}
               >
                 <Input
                   className={`${props?.record?.isAccepted ? 'bg-slate-200 cursor-not-allowed' : ''}`}
@@ -206,17 +223,13 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
               <Form.Item
                 name='dateBaptism'
                 label='Ngày cử hành'
-                rules={[{ required: true, message: 'Please enter your Người đỡ đầu ' }]}
+                rules={[{ required: true, message: 'Please enter ngày cử hành' }]}
               >
-                {props?.record?.isAccepted ? (
-                  <Input className='bg-slate-200 cursor-not-allowed' placeholder='' readOnly />
-                ) : (
-                  <DatePickerComponent
-                    recordDate={dateBaptism}
-                    onDateChange={undefined}
-                    disabled={props?.record?.isAccepted ? true : false}
-                  />
-                )}
+                <DatePicker
+                  className='w-[318px]'
+                  format={dateFormatList}
+                  disabled={props?.record?.isAccepted ? true : false}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -241,7 +254,7 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
         </Form>
         <div>
           <h2 className='mt-1 text-base font-bold'>Thông tin người đăng ký:</h2>
-          <table className='custom-table'>
+          <table className='custom-table mt-3'>
             <tbody>
               <tr>
                 <td>Họ và tên:</td>
@@ -259,7 +272,8 @@ const DrawerChristenComponent = (props: DrawerChristenProps) => {
               </tr>
               <tr>
                 <td>Ngày đăng ký:</td>
-                <td>{formatYYMMDD(props?.record?.createdAt)}</td>
+                {/* <td>{formatDateString(regisDate.toString())}</td> */}
+                <td>{regisDate}</td>
               </tr>
             </tbody>
           </table>

@@ -28,7 +28,8 @@ const Main = () => {
     handleDeleteCancel,
     onFinish,
     parishionersRes,
-    setCurrentPage
+    setCurrentPage,
+    onFinishUpdate
   } = useLogic();
 
   const {
@@ -72,7 +73,7 @@ const Main = () => {
         open={openDrawerEdit}
         onClose={onCloseDrawerEdit}
         form={form}
-        onFinishSubmit={onFinish}
+        onFinishSubmit={onFinishUpdate}
         record={selectedRecord}
       />
       <Modal
