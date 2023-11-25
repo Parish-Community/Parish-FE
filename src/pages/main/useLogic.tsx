@@ -48,7 +48,7 @@ const useLogic = () => {
 
     const getAllParishioners = async () => {
       try {
-        const response = await fetchParishioners(currentPage);
+        const response = await fetchParishioners(currentPage, search);
         setParishionerRes(response);
         setParishioner(response.data);
       } catch (error) {
@@ -77,7 +77,13 @@ const useLogic = () => {
     setOpenDrawerEdit(false);
   };
 
-  const columns: ColumnsType<DataType> = [
+  const onSearch = (value?: any) => {
+    console.log('onSearch', value);
+    setSearch(value);
+    setIsRefresh(!isRefresh);
+  };
+
+  const columns: ColumnsType<any> = [
     {
       title: 'ID',
       dataIndex: 'id',
@@ -133,6 +139,20 @@ const useLogic = () => {
         { text: 'Female', value: 'female' }
       ],
       onFilter: (value, record) => record.gender === value,
+      width: '4%'
+    },
+    {
+      title: 'Position',
+      dataIndex: 'position',
+      key: 'position',
+      // sorter: (a, b) => a.gender.localeCompare(b.gender),
+      filters: [
+        { text: 'Priest', value: 'priest' },
+        { text: 'Nun', value: 'nun' },
+        { text: 'Monk', value: 'monk' },
+        { text: 'Christianity', value: 'christianity' }
+      ],
+      onFilter: (value, record) => record.position === value,
       width: '4%'
     },
     {
@@ -209,7 +229,8 @@ const useLogic = () => {
     onCloseDrawer,
     onCloseDrawerEdit,
     openDrawerEdit,
-    onFinishUpdate
+    onFinishUpdate,
+    onSearch
   };
 };
 

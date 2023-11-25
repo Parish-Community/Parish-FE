@@ -6,6 +6,7 @@ import useLogic from './useLogic';
 import { Table } from '@/components/table';
 import UploadFile from '@/core/upload';
 import DrawerEdit from "./components/DrawerEdit";
+import { SearchBar } from "@/core/searchBar";
 
 const { Header, Content } = Layout;
 
@@ -29,7 +30,8 @@ const Main = () => {
     onFinish,
     parishionersRes,
     setCurrentPage,
-    onFinishUpdate
+    onFinishUpdate,
+    onSearch
   } = useLogic();
 
   const {
@@ -47,6 +49,9 @@ const Main = () => {
         <HeaderChristian buttons={listBUttons} children={<UploadFile />} />
       </Header>
       <Content style={{ margin: '26px 18px' }}>
+      <div className='w-[280px] h-[60px]'>
+          <SearchBar className='!bg-[#EFF4FB]' changeHandler={onSearch}></SearchBar>
+        </div>
         <div style={{ padding: 24, minHeight: 360, background: colorBgContainer }}>
           <Table
             key={tableKey}

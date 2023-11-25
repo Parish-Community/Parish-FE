@@ -9,6 +9,7 @@ import ChristenPage from './pages/christen';
 import MarriageRegister from './pages/marriage-register';
 import CourseScreen from './pages/class';
 import { useSelector } from 'react-redux';
+import DonationsPage from "./pages/donation";
 
 const AppRoutes = () => {
   const isAuthenticated = useSelector((state: any) => state.user.isAuthenticated);
@@ -38,7 +39,7 @@ const AppRoutes = () => {
           element={<DashboardLayout children={<MarriageRegister />} />}
         />
         <Route path='/parish/hôn-nhân/lớp-hôn-nhân' element={<DashboardLayout children={<CourseScreen />} />} />
-        <Route path='/parish/donation' element={<DashboardLayout children={<ChristenPage />} />} />
+        <Route path='/parish/donation' element={<DashboardLayout children={<DonationsPage />} />} />
         <Route path='/auth/login' element={<AuthLayout children={<LoginPage />} />} />
         <Route path='/auth/forgot-password' element={<AuthLayout children={<ForgotPasswordPage />} />} />
         <Route path='/auth/verify-otp' element={<AuthLayout children={<OtpPage />} />} />

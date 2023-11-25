@@ -57,3 +57,23 @@ export const acceptRegistration = async (id: string, data: any) => {
     console.error('Error accepting registration:', error);
   }
 };
+
+export const fetchTotalCourse = async () => {
+  try {
+    setBearerToken(localStorage.getItem('access_token'));
+    const response = await http.get(`/course/total`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching parishioner:', error);
+  }
+};
+
+export const fetchTotalCouple = async () => {
+  try {
+    setBearerToken(localStorage.getItem('access_token'));
+    const response = await http.get(`/course/couple-registration/total`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching parishioner:', error);
+  }
+};

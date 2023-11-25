@@ -80,3 +80,13 @@ export const deleteParishioner = async (id: number) => {
     console.error('Error deleting:', error);
   }
 };
+
+export const fetchTotalParishioner = async () => {
+  try {
+    setBearerToken(localStorage.getItem('access_token'));
+    const response = await http.get(`/parishioners/statistics/total`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching parishioner:', error);
+  }
+};

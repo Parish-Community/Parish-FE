@@ -1,144 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import { Column } from '@ant-design/plots';
 import { each, groupBy } from 'lodash';
-import { Space, Table, Tag } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-
-interface DataType {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-  tags: string[];
-}
+import { Space, Table, Tag, theme } from 'antd';
+import { Header } from 'antd/es/layout/layout';
+import HeaderChristian from '@/components/HeaderContent/HeaderChristian';
+import { ReadOutlined, HeartOutlined, DollarOutlined, UserOutlined } from '@ant-design/icons';
+import { fetchTotalParishioner } from "@/services/apis/parishioner";
+import { fetchTotalCouple, fetchTotalCourse } from "@/services/apis/course";
+import { fetchDonation } from "@/services/apis/donation";
 
 const OverviewPage = () => {
+  const {
+    token: { colorBgContainer }
+  } = theme.useToken();
   const [data, setData] = useState([]);
-
-  const columns: ColumnsType<DataType> = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age'
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address'
-    },
-    {
-      title: 'Tags',
-      key: 'tags',
-      dataIndex: 'tags',
-      render: (_, { tags }) => (
-        <>
-          {tags.map((tag) => {
-            let color = tag.length > 5 ? 'geekblue' : 'green';
-            if (tag === 'loser') {
-              color = 'volcano';
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      )
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <Space size='middle'>
-          <a>Invite {record.name}</a>
-          <a>Delete</a>
-        </Space>
-      )
-    }
-  ];
-
-  const dataTable: DataType[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer']
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser']
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher']
-    },
-    {
-      key: '4',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher']
-    },
-    {
-      key: '5',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher']
-    },
-    {
-      key: '6',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher']
-    },
-    {
-      key: '7',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher']
-    },
-    {
-      key: '8',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher']
-    }
-  ];
+  const [total, setTotalParishoners] = useState(0);
+  const [coursesTotal, setCoursesTotal] = useState(0);
+  const [coupleTotal, setCoupleTotal] = useState(0);
+  const [donationTotal, setDonationTotal] = useState<any>('');
 
   useEffect(() => {
     asyncFetch();
+    totalParishoners();
+    totalCourse();
+    totalCouple();
+    totalDonation();
   }, []);
 
+  const totalParishoners = async () => {
+    const data = await fetchTotalParishioner();
+    setTotalParishoners(data.data);
+  };
+
+  const totalCourse = async () => {
+    const data = await fetchTotalCourse();
+    setCoursesTotal(data.data);
+  };
+
+  const totalCouple = async () => {
+    const data = await fetchTotalCouple();
+    setCoupleTotal(data.data);
+  };
+
+  const totalDonation = async () => {
+    const data = await fetchDonation();
+    console.log(data.total);
+    setDonationTotal(data.total);
+  };
+
   const asyncFetch = () => {
-    fetch('https://gw.alipayobjects.com/os/antfincdn/8elHX%26irfq/stack-column-data.json')
+    fetch('http://localhost:8888/api/v1/parishioners/statistics/parish-cluster')
       .then((response) => response.json())
-      .then((json) => setData(json))
+      .then((json) => setData(json.data))
       .catch((error) => {
         console.log('fetch data failed', error);
       });
   };
-  // 也可以在项目中直接使用 lodash
   const annotations: any = [];
-  each(groupBy(data, 'year'), (values: any, k: any) => {
+  each(groupBy(data, 'parishCluster'), (values: any, k: any) => {
     const value = values.reduce((a: any, b: any) => a + b.value, 0);
     annotations.push({
       type: 'text',
@@ -155,34 +74,71 @@ const OverviewPage = () => {
   const config = {
     data,
     isStack: true,
-    xField: 'year',
+    xField: 'parishCluster',
     yField: 'value',
     seriesField: 'type',
     label: {
-      // 可手动配置 label 数据标签位置
       position: 'middle',
       // 'top', 'bottom', 'middle'
-      // 可配置附加的布局方法
       layout: [
-        // 柱形图数据标签位置自动调整
         {
           type: 'interval-adjust-position'
-        }, // 数据标签防遮挡
+        },
         {
           type: 'interval-hide-overlap'
-        }, // 数据标签文颜色自动调整
+        },
         {
           type: 'adjust-color'
         }
       ]
     },
-    // 使用 annotation （图形标注）来展示：总数的 label
     annotations
   };
 
   return (
-    <div className='flex justify-center'>
-      <div className='w-[50%] h-[690px] mt-6 bg-white ml-8'>
+    <div className=''>
+      <Header style={{ padding: 0, background: colorBgContainer }}>
+        <HeaderChristian children={undefined} />
+      </Header>
+      <div className='ml-4 mb-12 flex justify-between'>
+        <div className='bg-white w-[22%] h-[68px] items-center rounded-sm px-2 mt-6 shadow-lg flex justify-between'>
+          <div>
+            <h1 className='text-xl font-bold py-1'>Tổng giáo dân</h1>
+            <p className='text-lg'>{total}</p>
+          </div>
+          <div className='mr-6'>
+            <UserOutlined style={{ fontSize: '36px', color: '#08c' }} />
+          </div>
+        </div>
+        <div className='bg-white w-[22%] h-[68px] items-center rounded-sm px-2 mt-6 shadow-lg flex justify-between'>
+          <div>
+            <h1 className='text-xl font-bold py-1'>Tổng số tiền</h1>
+            <p className='text-lg'>{`${donationTotal}`}</p>
+          </div>
+          <div>
+            <DollarOutlined style={{ fontSize: '36px', color: '#08c' }} />
+          </div>
+        </div>
+        <div className='bg-white w-[22%] h-[68px] items-center rounded-sm px-2 mt-6 shadow-lg flex justify-between'>
+          <div>
+            <h1 className='text-xl font-bold py-1'>Tổng cặp đôi</h1>
+            <p className='text-lg'>{coupleTotal}</p>
+          </div>
+          <div>
+            <HeartOutlined style={{ fontSize: '36px', color: '#08c' }} />
+          </div>
+        </div>
+        <div className='bg-white w-[22%] h-[68px] items-center rounded-sm px-2 mt-6 shadow-lg flex justify-between'>
+          <div>
+            <h1 className='text-xl font-bold py-1'>Tổng lớp học</h1>
+            <p className='text-lg'>{coursesTotal}</p>
+          </div>
+          <div>
+            <ReadOutlined style={{ fontSize: '36px', color: '#08c' }} />
+          </div>
+        </div>
+      </div>
+      <div className='w-[100%] h-[390px] mt-6 bg-white ml-4'>
         <Column
           {...config}
           label={{
@@ -190,9 +146,6 @@ const OverviewPage = () => {
             layout: [{ type: 'interval-adjust-position' }, { type: 'interval-hide-overlap' }, { type: 'adjust-color' }]
           }}
         />
-      </div>
-      <div className='w-[50%] h-[610px] p-8'>
-        <Table columns={columns} dataSource={dataTable} />
       </div>
     </div>
   );
